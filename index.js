@@ -18,7 +18,7 @@ const pgConnectionConfigs = {
 const pool = new Pool (pgConnectionConfigs);
 
 const app = express();
-const port = 3010;
+const port = 3020;
 
 /* cookie functinality within js */
 app.use(cookieParser());
@@ -43,13 +43,6 @@ const whenQueryDone = (error, result) => {
     console.log(result.rows);
   }
 };
-
-
-
-
-
-
-
 
 /* FN for Routes */
 /* FN: get Setup Sheet*/
@@ -131,7 +124,27 @@ const showDashBoard = (req, res) => {
  res.render('userDashBoard');
 };
 
-const showSetupForm = (req, res) => {
+const showNewSetupForm = (req, res) => {
+  const results = Promise.all([
+    pool.query('SELECT * FROM users;'),
+    pool.query('SELECT * FROM platforms'),
+    pool.query('SELECT * FROM bodyshells'),
+    pool.query('SELECT * FROM events'),
+    pool.query('SELECT * FROM tracks'),
+/*     pool.query('SELECT * FROM tracktimes'), */
+    
+  ]).then((allResults) => {
+    /* console.log(allResults); */
+    console.log(allResults[0].rows);
+    console.log(allResults[1].rows);
+    console.log(allResults[2].rows);
+    console.log(allResults[3].rows);
+    console.log(allResults[4].rows);
+    /* console.log(allResults[5].rows); */
+  });
+  
+
+  /* res.send('testing new Promise setup. See console messages.'); */
   res.render('newSetupSheet');
 };
 
@@ -298,7 +311,7 @@ const showAllUsers = (req, res) => {
 
 /* ROUTES */
 app.get('/setup/:setupId', showSetupSheet); /* Single Setup Page */
-app.get('/setup', showSetupForm); /* Create New Setup */
+app.get('/setup', showNewSetupForm); /* Create New Setup */
 app.post('/setup', sendNewSetup); /* Post Setup body */
 
 app.get('/categories', showAllCategories); /* Show All Categories */

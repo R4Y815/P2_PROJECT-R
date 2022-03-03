@@ -30,7 +30,7 @@ INSERT INTO events (name, date, event_type_id, event_user_id, event_track_id) VA
 
 
 INSERT INTO tracktimes (event_id, track_id, tracktime_user_id, direction, lapcount, total_time, tracktime_type_id, tracktime_platform_id) VALUES 
-(1, 2, 1, 'CW', 41, '8:10.492', 1, 1);
+(1, 2, 1, 'CW', 41, '8:10.492', 1, 1); /* change to ms, store in DB as integer or long (if integer is not long enough), use functions at index.js area to convert value when going to front ennd, and then when entering, use function to convert from times back into milliseconds for database storage. */
 
 
 INSERT INTO setups 

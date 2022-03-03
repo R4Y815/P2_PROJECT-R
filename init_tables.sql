@@ -52,7 +52,7 @@ CREATE TABLE tracks (
 CREATE TABLE events (
   id SERIAL PRIMARY KEY, 
   name TEXT,
-  date DATE,
+  date DATE,   
   event_type_id INTEGER,
   CONSTRAINT fk_type
       FOREIGN KEY(event_type_id)
