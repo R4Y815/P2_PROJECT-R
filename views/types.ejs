@@ -1,0 +1,20 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of Type Classification:</h3>
+
+
+<% types.forEach((type) => { %>
+<div>
+  <span>
+    ID: <%= type.id %>）
+  </span>
+  <span>
+   <%= type.name %>
+  </span>
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

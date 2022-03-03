@@ -1,0 +1,41 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>All Track Times</h3>
+
+
+<% tracktimes.forEach((tracktimes) => { %>
+<div>
+  <span>
+    ID: <%= tracktimes.id %>）
+  </span>
+  <span>
+  | EVENT: <%= tracktimes.event_id %>
+  </span>
+  <span>
+  | TRACK: <%= tracktimes.track_id %>
+  </span>
+  <span>
+  | USER: <%= tracktimes.tracktime_user_id %>
+  </span>
+  <span>
+  | Direction: <%= tracktimes.direction %>
+  </span>
+  <span>
+  | No. of Laps: <%= tracktimes.lapcount %>
+  </span>
+  <span>
+  | Total Time: <%= tracktimes.total_time %>
+  </span>    
+  <span>
+  | Type: <%= tracktimes.tracktime_type_id %>
+  </span>     
+  <span>
+  | Chassis: <%= tracktimes.tracktime_platform_id %>
+  </span>        
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

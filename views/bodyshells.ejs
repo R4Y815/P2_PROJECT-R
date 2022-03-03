@@ -1,0 +1,32 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of All Bodyshells:</h3>
+
+
+<% bodyshells.forEach((bodyshell) => { %>
+<div>
+  <span>
+    ID: <%= bodyshell.id %>）
+  </span>
+  <span>
+   TYPE: <%= bodyshell.bodyshell_type_id %>
+  </span>
+  <span>
+  | BRAND: <%= bodyshell.brand %>
+  </span>
+  <span>
+  | NAME: <%= bodyshell.name %>
+  </span>
+  <span>
+  | MODEL: <%= bodyshell.bs_model %>
+  </span>
+  <span>
+  | VARIANT: <%= bodyshell.variant %>
+  </span>      
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

@@ -1,0 +1,33 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of All Events:</h3>
+
+
+<% events.forEach((event) => { %>
+<div>
+  <span>
+    ID: <%= event.id %>）
+  </span>
+  <span>
+   <%= event.date %>
+  </span>
+  <span>
+  | <%= event.name %>
+  </span>
+  <span>
+  | TYPE: <%= event.type %>
+  </span>
+  <span>
+  | TRACK: <%= event.event_track_id %>
+  </span>
+  <span>
+  | USER: <%= event.event_user_id %>
+  </span>
+
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

@@ -1,0 +1,19 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of Categories:</h3>
+
+<% categories.forEach((category) => { %>
+<div>
+  <span>
+    ID: <%= category.id %>）
+  </span>
+  <span>
+   <%= category.name %>
+  </span>
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

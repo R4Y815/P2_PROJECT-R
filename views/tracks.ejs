@@ -1,0 +1,32 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of All Tracks:</h3>
+
+
+<% tracks.forEach((track) => { %>
+<div>
+  <span>
+    ID: <%= track.id %>）
+  </span>
+  <span>
+   <%= track.name %>
+  </span>
+  <span>
+  | <%= track.climate %>
+  </span>
+  <span>
+  | <%= track.surface %>
+  </span>
+  <span>
+  | <%= track.layout %>
+  </span>
+  <span>
+  | <%= track.location %>
+  </span>
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

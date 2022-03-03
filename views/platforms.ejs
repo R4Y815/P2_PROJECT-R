@@ -1,0 +1,32 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>List of All Chassis:</h3>
+
+
+<% platforms.forEach((platform) => { %>
+<div>
+  <span>
+    ID: <%= platform.id %>）
+  </span>
+  <span>
+  | CAT: <%= platform.category_id %>
+  </span>
+  <span>
+  | TYPE: <%= platform.platform_type_id %>
+  </span>
+  <span>
+    <%= platform.brand %>
+  </span>
+  <span>
+    <%= platform.pName %>
+  </span>
+  <span>
+    <%= platform.model %>
+  </span>
+</div>
+<% }); %>  
+
+
+<%-include('z_footerGlobal')-%>

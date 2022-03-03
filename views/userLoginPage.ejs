@@ -1,0 +1,28 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+
+  <h2><u>LOGIN PAGE</u></h2>
+
+
+<form action ="/login" method="POST"  >
+  <div>
+    <label for="text" class="mb-3"><b>Email:</b></label>  
+    <input type="email" name="email" id="email"  required>
+  </div>
+  <div>
+    <label for="password" class="mb-3"><b>Password:</b></label>  
+    <input type="password" name="password" id="password"  required>
+  </div>
+
+  <!--    <div>
+<input type="hidden" name="created_Date" value="edited-<%= /*Date() */ %>"></div> -->
+  <div class="row justify-content-center">
+    <div class="col-auto"><input type="submit" value="Submit"></div>
+  </div> 
+</form>
+
+
+
+<%-include('z_footerGlobal')-%>
