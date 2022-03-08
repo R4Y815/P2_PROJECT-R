@@ -84,6 +84,20 @@ function dateToStr(inputDate, format) {
   return format;
 }
 
+/* HELPER FN: convert to DateTimeZone of JS */
+const dispDateCPUStr = (dateTZformat) => {
+  const dateStr1 = dateTZformat.toISOString().split('T')[0];
+  const yyyy = dateStr1.split('-')[0];
+  const mm = dateStr1.split('-')[1];
+  /* Additional + 1 is added to correct date display to local date in GMT +8 TZ */
+  const ddNmbr = Number(dateStr1.split('-')[2]) + 1;
+  const dd = ddNmbr.toString().padStart(2,"0");
+  const correctedDateStr = yyyy + '-' + mm + '-' + dd;
+  console.log('corrected date =', correctedDateStr);
+return correctedDateStr;
+};
+
+
 
 /* FN for Routes */
 /* FN: get Setup Sheet*/
@@ -391,6 +405,7 @@ const showAllTrackTimes = (req, res) => {
     outputs.forEach((output) => {
       output.timeStr = convertMsToText(output.total_time);
       output.dateStr = dateToStr(output.date, 'DD-MM-YYYY');
+      /* output.dateStr = dispDateCPUStr(output.date); */
     });
     const content = { tracktimes: outputs };
     console.log('content =', content);
@@ -480,9 +495,9 @@ const showTracktimeEdit = (req, res) => {
     const timeStr = convertMsToText(allResults[6].rows[0].total_time);
     const dateStr = dateToStr(allResults[6].rows[0].date, "DD-MM-YYYY");
 
-    const dbDateStr = (allResults[6].rows[0].date).toISOString().split('T')[0];
+    const dbDateStr = dispDateCPUStr(allResults[6].rows[0].date)
 
-      const todayDateStr = new Date().toISOString().split('T')[0];
+    const todayDateStr = new Date().toISOString().split('T')[0];
 
     const content = {
       id: tracktimeId,
