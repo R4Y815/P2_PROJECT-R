@@ -5,10 +5,11 @@
 <h3>
   <b>List of all Setups </b>
 </h3>
+<p></p>
   <% setups.forEach((setup) => { %>
 <div>
   <span>
-  <a href="/setup/<%= setup.id %>"><b><%= setup.id %>)-<i>"<%= setup.name %>"</i></b></a>
+  <a href="/setup/<%= setup.id %>"><b>Setup <%= setup.id %>: <i>"<%= setup.name %>"</i></b></a>
   </span>
 </div>
 <div>

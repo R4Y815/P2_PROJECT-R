@@ -2,7 +2,9 @@
 <h1 class="topSpacer"><p></p>.</h1>
 <h4 class="topSpacer"><p></p>.</h4>
 
-<h4><b><u>SetupSheet #<%= index %></u></b></h4>
+<h4>
+  <b><u>SetupSheet #<%= index %></u></b>
+</h4>
 <div>
   <form action="/setup/<%= index %>/edit" method="GET">  
     <button type="submit" class="btn-sm">EDIT Setup <%= index %> </button>
@@ -22,43 +24,43 @@
 </div>
 <p></p>
 <div>
-  <b><u>Electronic Speed Controller (ESC)</u></b>  
-  <div>
-    Max Continuous Current Rating: <%= escSize %>
+  <b><u>ELECTRONIC SPEED CONTROLLER (ESC)</u></b>  
+  <div> 
+    <b>Max Continuous Current Rating: </b><%= escSize %>
   </div>
-  <div>
-    ESC Setting Constraints: <%= escSetting  %>
+  <div> 
+    <b>ESC Setting Constraints: </b><%= escSetting  %>
   </div>
 </div>
 <p></p>
 <div>
-  <b><u>Final Drive Ratio (FDR):</u></b> <%= fdr  %>
+  <b><u>FINAL DRIVE RATIO (FDR):</u></b> <%= fdr  %>
 </div>
 <p></p>
 <div>
   <b><u>TIRES</u></b>
-  <div>Brand: <%= tireBrand %></div>
-  <div>Front Tire Shore (hardness): <%= tiresFrntShore  %></div>
-  <div>Rear Tire Shore (hardness): <%= tiresRearShore %></div>
+  <div><b>Brand: </b><%= tireBrand %></div>
+  <div><b>Front Tire Shore (hardness): </b><%= tiresFrntShore  %></div>
+  <div><b>Rear Tire Shore (hardness): </b><%= tiresRearShore %></div>
 </div>
 <p></p>
 <div>
-  <b><u>Front Differntial (Diff.) Setup</u></b>
+  <b><u>FRONT DIFFERENTIAL(Diff.):</u></b>
   <div>
-     Diff. TYPE: <%= diffFrntType %>
+     <b>Diff. Type: </b><%= diffFrntType %>
   </div>
   <div>
-     Diff. Oil Weight/Viscosity (cP/ct): <%= diffFrntOil  %>
+     <b>Diff. Oil Weight/Viscosity (cP/ct): </b><%= diffFrntOil  %>
   </div>
 </div>
 <p></p>
 <div>
   <b><u>Rear Differntial (Diff.) Setup</u></b>
   <div>
-    Diff. TYPE: <%= diffRearType %>
+    <b>Diff. TYPE: </b><%= diffRearType %>
   </div>
   <div>
-    Diff. Oil Weight/Viscosity (cP/ct): <%= diffRearOil %>
+    <b>Diff. Oil Weight/Viscosity (cP/ct): </b><%= diffRearOil %>
   </div>
 </div>
 <p></p>
@@ -86,44 +88,44 @@
 <div>
   <b><u>SUSPENSION:</u> FRONT</b>
   <div>
-    Front Shockbody on Shock Tower Position: <%= susFrntTopPos %> mounting hole
+    <b>Front Shockbody on Shock Tower Position: </b><%= susFrntTopPos %> mounting hole
   </div>
   <div>
-    Front Piston Arm on Swing Arm Position: <%= susFrntBtnPos %> mounting hole
+    <b>Front Piston Arm on Swing Arm Position: </b><%= susFrntBtnPos %> mounting hole
   </div>
   <div>
-    Front Shockbody Piston Setting: <%=  susFrntPistHoles %> holes
+    <b>Front Shockbody Piston Setting: </b><%=  susFrntPistHoles %> holes
   </div>
   <div>
-    Front Suspension Spring Stiffness: <%= susFrntSpring %>
+    <b>Front Spring Stiffness: </b><%= susFrntSpring %>
   </div>
   <div>
-    Front Suspension Oil Weight(viscosity)(cP/ct): <%= susFrntOil %>
+    <b>Front Susp. Oil Weight(viscosity)(cP/ct): </b><%= susFrntOil %>
   </div>
   <div>
-    Front Suspension Rebound Setting: <%=  susFrntRebound %>
+    <b>Front Susp. Rebound Setting: </b><%=  susFrntRebound %>
   </div>
 </div>
 <p></p>
 <div>
   <b><u>SUSPENSION:</u> REAR</b>
   <div>
-    Rear Shockbody on Shock Tower Position: <%= susRearTopPos  %> hole 
+    <b>Rear Shockbody on Shock Tower Position: </b><%= susRearTopPos  %> mounting hole
   </div>
   <div>
-    Rear Piston Arm on Swing Arm Position: <%= susRearBtnPos %> hole
+    <b>Rear Piston Arm on Swing Arm Position: </b><%= susRearBtnPos %> mounting hole
   </div>
   <div>
-    Rear Shockbody Piston Setting: <%= susRearPistHoles %> holes
+    <b>Rear Shockbody Piston Setting: </b><%= susRearPistHoles %> holes
   </div>
   <div>
-    Rear Suspension Spring Stiffness: <%= susRearSpring %>
+    <b>Rear Spring Stiffness: </b><%= susRearSpring %>
   </div>
   <div>
-    Rear Suspension Oil Weight(viscosity)(cP/ct) : <%= susRearOil %>
+    <b>Rear Susp. Oil Weight(viscosity)(cP/ct) : </b><%= susRearOil %>
   </div>
   <div>
-    Rear Suspension Rebound Setting: <%= susRearRebound %>
+    <b>Rear Susp. Rebound Setting: </b><%= susRearRebound %>
   </div>
 </div>
 <p></p>
@@ -156,7 +158,7 @@
 <p></p>
 
 <div>
-   <b><u>ANTI-ROLL BAR</b> (ARS, Stabiliser):</u>
+   <b><u>ANTI-ROLL BAR</b> (<b>ARS, Stabiliser</b>):</u>
   <div>
     <b>Front Anti-Roll Bar Thickness:</b> <%= antiRollFrnt %> deg
   </div>

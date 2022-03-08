@@ -2,29 +2,28 @@
 <h1 class="topSpacer"><p></p>.</h1>
 <h4 class="topSpacer"><p></p>.</h4>
 
-<h3>List of All Bodyshells:</h3>
-
+<h3>
+  <b>List of All Bodyshells</b>:
+</h3>
+<p></p>
 
 <% bodyshells.forEach((bodyshell) => { %>
 <div>
   <span>
-    ID: <%= bodyshell.id %>）
+    <b>Cover <%= bodyshell.id %></b>）
   </span>
   <span>
-   TYPE: <%= bodyshell.bodyshell_type_id %>
+   TYPE <%= bodyshell.bodyshell_type_id %>
   </span>
   <span>
-  | BRAND: <%= bodyshell.brand %>
+  | <%= bodyshell.brand %>
   </span>
   <span>
-  | NAME: <%= bodyshell.name %>
+   <%= bodyshell.name %>
   </span>
   <span>
-  | MODEL: <%= bodyshell.bs_model %>
+  | <%= bodyshell.bs_model %>(<%= bodyshell.variant %>)
   </span>
-  <span>
-  | VARIANT: <%= bodyshell.variant %>
-  </span>      
 </div>
 <% }); %>  
 

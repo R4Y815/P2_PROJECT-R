@@ -2,28 +2,27 @@
 <h1 class="topSpacer"><p></p>.</h1>
 <h4 class="topSpacer"><p></p>.</h4>
 
-<h3>List of All Chassis:</h3>
-
+<h3>
+  <b>List of All Chassis:</b>
+</h3>
+<p></p>
 
 <% platforms.forEach((platform) => { %>
 <div>
   <span>
-    ID: <%= platform.id %>）
+    <b>Platform <%= platform.id %></b>）
   </span>
   <span>
-  | CAT: <%= platform.category_id %>
+   TYPE <%= platform.platform_type_id %>
   </span>
   <span>
-  | TYPE: <%= platform.platform_type_id %>
+   | <%= platform.brand %>
   </span>
   <span>
-    <%= platform.brand %>
+    <%= platform.name %>
   </span>
   <span>
-    <%= platform.pName %>
-  </span>
-  <span>
-    <%= platform.model %>
+   | (<%= platform.model %>)
   </span>
 </div>
 <% }); %>  

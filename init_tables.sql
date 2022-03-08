@@ -26,7 +26,6 @@ CREATE TABLE bodyshells (
 
 CREATE TABLE platforms (
   id SERIAL PRIMARY KEY,
-  category_id INTEGER,
   platform_type_id INTEGER, 
   CONSTRAINT fk_type
       FOREIGN KEY (platform_type_id)

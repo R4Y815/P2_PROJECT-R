@@ -2,11 +2,13 @@
 <h1 class="topSpacer"><p></p>.</h1>
 <h4 class="topSpacer"><p></p>.</h4>
 
-<h3>All Track Times</h3>
-
+<h3>
+  <b>All Track Times</b>
+</h3>
+<p></p>
 
 <% tracktimes.forEach((tracktimes) => { %>
-<h4><b><u>TrackTime ID</u></b>: <%= tracktimes.tracktimes_id %></h4>
+<h5><b><u>TrackTime ID</u></b>: <%= tracktimes.tracktimes_id %></h5>
 <div>
   <form action="/tracktime/<%= tracktimes.tracktimes_id %>/edit" method="GET">  
     <button type="submit" class="btn-sm">EDIT Tracktime <%= tracktimes.tracktimes_id %> </button>
@@ -45,7 +47,7 @@
       <b>Chassis</b>: <%= tracktimes.platform_brand %> <%= tracktimes.platform_name %> (<%= tracktimes.platform_model %>) 
     </div>
     <div>
-      <b>Chassis Setup:</b>[<%= tracktimes.setup_id %>-<%= tracktimes.setup_name %>]
+      <b>Chassis Setup: </b><a href="/setup/<%= tracktimes.setup_id %>">[<%= tracktimes.setup_id %>-<%= tracktimes.setup_name %>]</a>
     </div>
   </div>
   <div>
