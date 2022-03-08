@@ -28,7 +28,7 @@
   <select name="platformId">
     <% platforms.forEach((platform) => { %>
       <option value="<%= platform.id %>">
-        <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+       TYPE<%= platform.platform_type_id %> | <%= platform.brand %> | <%= platform.name %> (<%= platform.model %>)</option>  
       <% }); %>
   </select>
 </div>  

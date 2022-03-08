@@ -73,7 +73,7 @@
   <label for="typeId" class="mb-3"><b>TYPE:</b></label>  
   <select name="typeId">
     <% types.forEach((type) => { %>
-      <option value="<%= type.id %>"><%= type.name %></option>  
+      <option value="<%= type.id %>"> TYPE<%= type.id %> | <%= type.name %></option>  
       <% }); %>
   </select>
 </div>  
@@ -84,7 +84,7 @@
   <label for="platformId" class="mb-3"><b>CHASSIS:</b></label>  
   <select name="platformId">
     <% platforms.forEach((platform) => { %>
-      <option value="<%= platform.id %>"><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+      <option value="<%= platform.id %>">TYPE<%= platform.platform_type_id %> | <%= platform.brand %> | <%= platform.name %> (<%= platform.model %>)</option>  
       <% }); %>
   </select>
 </div>  
@@ -105,7 +105,7 @@
   <label for="bodyshell_id" class="mb-3"><b>BODYSHELL:</b></label>  
   <select name="bodyshell_id">
     <% bodyshells.forEach((bodyshell) => { %>
-      <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
+      <option value="<%= bodyshell.id %>">TYPE<%= bodyshell.bodyshell_type_id %> | <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
       <% }); %>
   </select>
 </div> 

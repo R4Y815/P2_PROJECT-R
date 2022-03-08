@@ -4,25 +4,78 @@ INSERT INTO users ( name, email, hashed_password ) VALUES
 ('Fernando Alonso', 'Fernando@McLaren.com', 'ecb0cf4985d998b2b66cabc99c1ea29ba854fbbccc73b95c0c733f6b11bdad836bf946a84f4154748545c540184d253bf6d8e2b7c4dfd4f02241fd9084f78a40');
 
 INSERT INTO types (name) VALUES
-('1/10 ELECTRIC TC'),
-('1/12 PAN');
+('1/5 NITRO TC 4WD'),
+('1/8 ELECTRIC PAN 4WD'),
+('1/8 NITRO PAN 4WD'),
+('1/8 NITRO TC 4WD'),
+('1/8 ELECTRIC TC 4WD'),
+('1/10 ELECTRIC TC 4WD'),
+('1/10 ELECTRIC TC FWD'),
+('1/10 ELECTRIC TC RWD'),
+('1/10 ELECTRIC DRIFT 4WD'),
+('1/10 ELECTRIC DRIFT RWD'),
+('1/10 ELECTRIC PAN 200mm'),
+('1/10 ELECTRIC PAN 235mm'),
+('1/10 ELECTRIC PAN F1'),
+('1/10 ELECTRIC M-CHASSIS 4WD'),
+('1/10 ELECTRIC M-CHASSIS FWD'),
+('1/10 ELECTRIC M-CHASSIS RWD'),
+('1/12 ELECTRIC PAN RWD'),
+('1/16 ELECTRIC RALLY 4WD'),
+('1/16 ELECTRIC BUGGY 4WD'),
+('1/16 ELECTRIC BUGGY RWD'),
+('1/16 ELECTRIC STADIUM TRUCK 4WD'),
+('1/16 ELECTRIC STADIUM TRUCK RWD'),
+('1/28 ELECTRIC BUGGY AWD'),
+('1/28 ELECTRIC BUGGY RWD'),
+('1/28 ELECTRIC F1 RWD'),
+('1/28 ELECTRIC TC AWD'),
+('1/28 ELECTRIC TC FWD'),
+('1/28 ELECTRIC TC RWD');
+
 
 INSERT INTO bodyshells (bodyshell_type_id, brand, name, bs_model, variant) VALUES 
-(1, 'ZOORACING', 'ZOODIAC', 'ZR-0007-07', 'STANDARD'),
-(1, 'ZOORACING', 'DOGSBOLLOX', 'ZR-0005-07', 'STANDARD'),
-(1, 'ZOORACING', 'DOGSBOLLOX', 'ZR-0005-05', 'ULTRALIGHT');
+(6, 'ZOORACING', 'ZOODIAC', 'ZR-0007-07', 'STANDARD'),
+(6, 'ZOORACING', 'DOGSBOLLOX', 'ZR-0005-07', 'STANDARD'),
+(28, 'KYOSHO', 'Celica GT-FOUR', 'MZN132', 'WHITE'),
+(28, 'KYOSHO', 'Celica GT-FOUR', 'MZPP418R', 'RED'),
+(6, 'ZOORACING', 'DOGSBOLLOX', 'ZR-0005-05', 'ULTRALIGHT'),
+(17, 'Bittydesign', 'LSM19', 'BD12-LSM19', 'LIGHTWEIGHT'),
+(17, 'Bittydesign', 'LSM19 Ultra Lite Weight', 'BD12-LSM19ULT', 'Ultra Lite Weight'),
+(17, 'TAMIYA', 'Mazda 787B No.18', '51520', 'Clear Body Parts Set'),
+(17, 'PROTOform', 'AMR-12', '1611-21', 'LIGHTWEIGHT');
 
 
 INSERT INTO platforms (platform_type_id, brand, name, model ) VALUES 
-(1, '3Racing', 'ADVANCE 21M', 'KIT-ADVANCE 21M' ),
-(1, 'Mugen Seki', 'MTC2', 'A2003-A'),
-(1, 'Mugen Seki', 'MTC2', 'A2003-C'),
-(1, 'XRAY', 'T4(2020)', '300026');
+(6, 'CARTEN', 'T410R', '-'),
+(6, 'CARTEN', 'T410', '-'),
+(6, '3Racing', 'ADVANCE 21M', 'KIT-ADVANCE 21M' ),
+(6, 'Mugen Seki', 'MTC2', 'A2003-A'),
+(6, 'Mugen Seki', 'MTC2', 'A2003-C'),
+(6, 'RACEOPT/SNRC', 'MTS-T3', 'S120033'),
+(6, 'RACEOPT/SNRC', 'MTS-T3M', 'S120033'),
+(6, 'XRAY', 'T4(2020)', '300026'),
+(14, 'CARTEN', 'M210R', '-'),
+(14, 'CARTEN', 'M210', '-'),
+(28, 'KYOSHO', 'MiniZ', 'MR-03(31717MO)'),
+(10, 'MST', 'RMX RRX 2.5S', '532200'),
+(6, 'TAMIYA', 'TT-02', '58694'),
+(10, 'YOKOMO', 'YD2-AC', 'DP-YD2SZACX');
+
+
+
 
 
 INSERT INTO tracks (name, climate, surface, layout, location) VALUES 
 ('Tsukuba RC Park', 'INDOOR', 'CARPET', 'TECHNICAL', 'Ibaraki, JAPAN'),
-('Shirakaba 2in1 Circuit', 'OUTDOOR', 'ASPHALT', 'MIXED', 'NAGANO, JAPAN');
+('Shirakaba 2in1 Circuit', 'OUTDOOR', 'ASPHALT', 'MIXED', 'Nagano, JAPAN'),
+('Urban RC', 'OUTDOOR', 'ASPHALT', 'MIXED', 'Rochor, SINGAPORE'),
+('RCMCSG Track', 'OUTDOOR', 'ASPHALT', 'HIGH-SPEED', 'East Coast, SINGAPORE'),
+('WIREGRASS HOBBIES MINI Z', 'INDOOR', 'CARPET', 'MIXED', 'Alabama, USA'),
+('The Yard-HOBBYTOWN USA', 'INDOOR', 'CARPET', 'MIXED', 'Georgia, USA'),
+('Putrajaya RC Park', 'OUTDOOR', 'DIRT', 'TECHNICAL', 'Kuala Lumpur, Malaysia'),
+('TMB RC', 'OUTDOOR', 'DIRT', 'TECHNICAL', 'Kuala Lumpur, Malaysia');
+
 
 INSERT INTO setups 
 (
