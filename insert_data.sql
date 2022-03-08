@@ -115,5 +115,5 @@ VALUES (
 
 
 INSERT INTO tracktimes ( date, event_name, track_id, direction, tracktime_user_id, lapcount, total_time, tracktime_type_id, tracktime_platform_id, tracktime_setup_id, tracktime_bodyshell_id ) VALUES
-('2017-07-22', '2018 JMRCA Japanese National Championship Day 3/3', 2, 'CW', 1, 41, '8:10.492', 1, 1, 1, 1);
+('2017-07-22', '2018 JMRCA Japanese National Championship Day 3/3', 2, 'CW', 1, 41, 505495, 1, 1, 1, 1);
 

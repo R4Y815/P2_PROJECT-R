@@ -9,7 +9,7 @@
 <form action="/tracktime/<%= id %>?_method=PUT" method="POST">
 <div>
   <label for="date"><b><u>Date:</u></b></label>  
-  <input type="date" name="date" id="date" value="<%= tracktime.date %>">
+  <input type="date" name="date" id="date"> <small>[previous: <%= tracktime.date %>]</small>
 </div>
 <p></p>
 <div>
@@ -63,7 +63,7 @@
 <!-- Total time taken input needs to be changed into integer or long input... taken in as mins, secs, milliseconds separately then recombined to ms on the backend.  -->
 <div>
   <label for="total_time"><b><u>Total Time:</u></b></label>  
-  <input type="text" name="total_time" id="total_time" value="<%= tracktime.total_time %>">
+  <input type="text" name="total_time" id="total_time" value="<%= totalTime %>">
 </div>
 <p></p>
 

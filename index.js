@@ -5,6 +5,7 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import jsSHA from 'jssha';
+import moment from 'moment';
 
 /* POSTGRESQL STACK BELOW */
 /* Connecting database to server */
@@ -43,6 +44,22 @@ const whenQueryDone = (error, result) => {
     /* rows key has the data */
     console.log(result.rows);
   }
+};
+
+/* HELPER FUNCTION: CONVERT TIMES TEXT INPUT from mins:secs: ms INTO ms  */
+
+const convertTextToMs = (timeText) => {
+  const mins = Number(timeText.split(':')[0]);
+  const secs = Number(timeText.split(':')[1].split('.')[0]);
+  const millisecs = Number(timeText.split(':')[1].split('.')[1]);
+  return mins * 60 * 1000 + secs * 1000 + millisecs;
+};
+
+const convertMsToText = (timeMs) => {
+  const minsStr = (timeMs / 60000).toString().split('.')[0];
+  const secsStr = ((timeMs % 60000) / 1000).toString().split('.')[0];
+  const msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
+  return minsStr + ':' + secsStr + '.' + msStr;
 };
 
 /* FN for Routes */
@@ -345,8 +362,13 @@ const showAllTrackTimes = (req, res) => {
       console.log('ERROR @ TRACKTIMES QUERY =', trackTimesErrors);
       return;
     }
-    console.log(trackTimesResults.rows);
-    const content = { tracktimes: trackTimesResults.rows };
+    console.log('trackTimesResults.rows =', trackTimesResults.rows);
+    const outputs = trackTimesResults.rows;
+    outputs.forEach((output) => {
+      output.timeStr = convertMsToText(output.total_time);
+    });
+    const content = { tracktimes: outputs };
+    console.log('content =', content);
     res.render('tracktimes', content);
   });
 };
@@ -377,13 +399,14 @@ const showNewTracktimeForm = (req, res) => {
       setups: allResults[4].rows,
       bodyshells: allResults[5].rows,
     };
-    res.render('newTracktimes', content);
+    res.render('newTracktime', content);
   });
 };
 
 const sendNewTracktime = (req, res) => {
 const formSubmitted = req.body;
 const formData = JSON.parse(JSON.stringify(formSubmitted));
+const timeInMs = convertTextToMs(formData.total_time);
 const tracktimeInput = [
 formData.date,
 formData.event_name,
@@ -391,7 +414,7 @@ formData.trackId,
 formData.direction,
 formData.userId,
 formData.lapcount,
-formData.total_time,
+timeInMs,
 formData.typeId,
 formData.platformId,
 formData.setupId,
@@ -421,9 +444,10 @@ const showTracktimeEdit = (req, res) => {
     pool.query('SELECT * FROM platforms;'),
     pool.query('SELECT * FROM setups;'),
     pool.query('SELECT * FROM bodyshells ORDER BY brand ASC;'),
-    pool.query('SELECT tracktimes.id AS tracktimes_id, date, event_name, tracks.name AS track_name, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, setups.id AS setup_id, setups.name AS setup_name, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
+    pool.query('SELECT tracktimes.id AS tracktimes_id, tracktimes.date, event_name, tracks.name AS track_name, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, setups.id AS setup_id, setups.name AS setup_name, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
   ]).then((allResults) => {
-    /* console.log('allResults[6].rows =', allResults[6].rows); */
+    /* console.log('allResults[6].rows[0] =', allResults[6].rows[0]); */
+    const timeStr = convertMsToText(allResults[6].rows[0].total_time);
     const content = {
       id: tracktimeId,
       tracks: allResults[0].rows,
@@ -433,7 +457,9 @@ const showTracktimeEdit = (req, res) => {
       setups: allResults[4].rows,
       bodyshells: allResults[5].rows,
       tracktime: allResults[6].rows[0],
+      totalTime: timeStr,
     };
+    console.log('Date =',content.tracktime.date);
     res.render('editTracktime', content);
   });
 };
@@ -443,6 +469,7 @@ const sendEditedTracktime = (req, res) => {
   const tracktimeEditData = JSON.parse(JSON.stringify(req.body));
   /* console.log('tracktimeEditData =', tracktimeEditData); */
   const tracktimeEditInput = Object.values(tracktimeEditData);
+  tracktimeEditInput[6] = convertTextToMs(tracktimeEditInput[6]);
   tracktimeEditInput.push(tracktimeId);
   console.log('tracktimeEditInput =', tracktimeEditInput);
   const editTracktimeQuery = 'UPDATE tracktimes SET date = $1, event_name = $2, track_id = $3, tracktime_user_id = $4, direction = $5, lapcount = $6, total_time = $7, tracktime_type_id = $8, tracktime_platform_id = $9, tracktime_setup_id = $10, tracktime_bodyshell_id = $11 WHERE id = $12;';

@@ -111,7 +111,7 @@ CREATE TABLE tracktimes (
       FOREIGN KEY(tracktime_user_id)
       REFERENCES users(id),
   lapcount INTEGER,
-  total_time TEXT,
+  total_time INTEGER,
 tracktime_type_id INTEGER, 
   CONSTRAINT fk_type    
       FOREIGN KEY(tracktime_type_id)
