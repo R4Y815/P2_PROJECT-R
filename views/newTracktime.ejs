@@ -93,10 +93,10 @@
 
 <!-- Drop down selection for SETUP ID -->
 <div>
-  <label for="setupId" class="mb-3"><b>SETUP :</b></label>  
+  <label for="setupId" class="mb-3"><b>CHASSIS SETUP :</b></label>  
   <select name="setupId">
     <% setups.forEach((setup) => { %>
-      <option value="<%= setup.id %>">#<%= setup.id %>- <%= setup.name %></option>  
+      <option value="<%= setup.id %>"> <%= setup.platform_name %>: Setup #<%= setup.id %>- <%= setup.name %></option>  
       <% }); %>
   </select>
 </div>  

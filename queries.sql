@@ -103,10 +103,15 @@ tracktime_bodyshell_id = $11
 WHERE id = $12;
 
 --show all setups 
-
 SELECT setups.id, platforms.brand, platforms.name AS platform_name, setups.motor_turn, setups.fdr, setups.name AS setup_name, users.name AS user_name
 FROM setups
 INNER JOIN platforms  ON setups.platform_id = platforms.id
 INNER JOIN users ON setups.userid = users.id 
 ORDER BY setups.id ASC;   
+
+
+--SETUP DROPDOWN for NEW TRACKTIMES: 
+SELECT  platforms.model, setups.id, setups.name
+FROM setups
+INNER JOIN platforms ON setups.platform_id = platforms.id;
 

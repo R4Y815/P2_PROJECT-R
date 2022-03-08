@@ -420,7 +420,7 @@ const showNewTracktimeForm = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY name ASC;'),
     pool.query('SELECT * FROM types'),
     pool.query('SELECT * FROM platforms ORDER BY brand ASC'),
-    pool.query('SELECT * FROM setups ORDER BY name'),
+    pool.query('SELECT  platforms.name AS platform_name, platforms.model, setups.id, setups.name FROM setups INNER JOIN platforms ON setups.platform_id = platforms.id;'),
     pool.query('SELECT * FROM bodyshells ORDER by brand ASC'),
   ]).then((allResults) => {
     /* console.log(allResults); */
