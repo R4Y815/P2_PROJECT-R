@@ -9,7 +9,7 @@
 <form action="/tracktime/<%= id %>?_method=PUT" method="POST">
 <div>
   <label for="date"><b><u>Date:</u></b></label>  
-  <input type="date" name="date" id="date"> <small>[previous: <%= dateStringDisp %>]</small>
+  <input type="date" name="date" id="date" min="1960-01-01" max="<%= dateNow %>" value="<%= dateDb %>"> <small> [previous: <%= dateStringDisp %>]</small>
 </div>
 <p></p>
 <div>

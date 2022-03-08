@@ -9,7 +9,7 @@
 <form action="/tracktime" method="POST">
 <div>
   <label for="date"><b><u>Date:</u></b></label>  
-  <input type="date" name="date" id="date" value="1999-12-31">
+  <input type="date" name="date" id="date" min="1960-01-01" max="<%= dateNow %>" value="<%= dateNow %>">
 </div>
 <p></p>
 <div>

@@ -63,16 +63,15 @@ const convertMsToText = (timeMs) => {
 };
 
 /* CONVERT JS Date Datatype into STRING */
-
 function dateToStr(inputDate, format) {
   /* parse the input date */
   const date = new Date(inputDate);
   /* extract the parts of the date */
   const day = date.getDate();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
   const year = date.getFullYear();
   /* replace the month */
-  format = format.replace("MM", month.toString().padStart(2,0));
+  format = format.replace("MM", month.toString().padStart(2, 0));
   /* replace the year */
   if (format.indexOf("YYYY") > -1) {
     format = format.replace("YYYY", year.toString());
@@ -84,34 +83,6 @@ function dateToStr(inputDate, format) {
 
   return format;
 }
-
-
-//a simple date formatting function
-/* function dateFormat(inputDate, format) {
-    //parse the input date
-    const date = new Date(inputDate);
-
-    //extract the parts of the date
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();    
-
-    //replace the month
-    format = format.replace("MM", month.toString().padStart(2,"0"));        
-
-    //replace the year
-    if (format.indexOf("yyyy") > -1) {
-        format = format.replace("yyyy", year.toString());
-    } else if (format.indexOf("yy") > -1) {
-        format = format.replace("yy", year.toString().substr(2,2));
-    }
-
-    //replace the day
-    format = format.replace("dd", day.toString().padStart(2,"0"));
-
-    return format;
-} */
-
 
 
 /* FN for Routes */
@@ -270,7 +241,7 @@ const showSetupEdit = (req, res) => {
   const results = Promise.all([
     pool.query('SELECT * from users ORDER BY name ASC;'),
     pool.query('SELECT * FROM platforms ORDER BY brand ASC;'),
-    pool.query('SELECT setups.id, setups.name, users.name AS user_name, platforms.brand AS platform_brand, platforms.name AS platform_name, platforms.model, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore,tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght, wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl, wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos, susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos,susp_frnt_pist_holes, susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness, susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound, camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness FROM setups INNER JOIN users ON setups.userid = users.id INNER JOIN platforms ON platform_id = platforms.id WHERE setups.id = $1;', setupIndexData),
+    pool.query('SELECT setups.id, setups.name, setups.userid, users.name AS user_name, setups.platform_id, platforms.brand AS platform_brand, platforms.name AS platform_name, platforms.model, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore,tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght, wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl, wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos, susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos,susp_frnt_pist_holes, susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness, susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound, camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness FROM setups INNER JOIN users ON setups.userid = users.id INNER JOIN platforms ON platform_id = platforms.id WHERE setups.id = $1;', setupIndexData),
   ]).then((allResults) => {
     const content = {
       id: setupId,
@@ -280,6 +251,7 @@ const showSetupEdit = (req, res) => {
     };
 /*     console.log('setup motor_size=', content.setup.motor_size);
     console.log('Mechanic name =', content.setup.user_name); */
+ /*    console.log('content.setup =', content.setup); */
     res.render('editSetup', content);
   });
 }
@@ -444,7 +416,10 @@ const showNewTracktimeForm = (req, res) => {
     console.log(allResults[4].rows);
     console.log(allResults[5].rows); */
     /* res.send('testing new Promise setup. See console messages.'); */
+    const todayDateStr = new Date().toISOString().split('T')[0];
+    console.log('todayDateStr =', todayDateStr);
     const content = {
+      dateNow: todayDateStr,
       tracks: allResults[0].rows,
       users: allResults[1].rows,
       types: allResults[2].rows,
@@ -452,6 +427,7 @@ const showNewTracktimeForm = (req, res) => {
       setups: allResults[4].rows,
       bodyshells: allResults[5].rows,
     };
+    
     res.render('newTracktime', content);
   });
 };
@@ -504,6 +480,10 @@ const showTracktimeEdit = (req, res) => {
     const timeStr = convertMsToText(allResults[6].rows[0].total_time);
     const dateStr = dateToStr(allResults[6].rows[0].date, "DD-MM-YYYY");
 
+    const dbDateStr = (allResults[6].rows[0].date).toISOString().split('T')[0];
+
+      const todayDateStr = new Date().toISOString().split('T')[0];
+
     const content = {
       id: tracktimeId,
       tracks: allResults[0].rows,
@@ -515,6 +495,8 @@ const showTracktimeEdit = (req, res) => {
       tracktime: allResults[6].rows[0],
       totalTime: timeStr,
       dateStringDisp: dateStr,
+      dateDb: dbDateStr,
+      dateNow: todayDateStr,
     };
     console.log('Date =', content.tracktime.date);
     res.render('editTracktime', content);

@@ -18,9 +18,13 @@
   <label for="userId" class="mb-3"><b>Setup Mechanic:</b></label>  
   <select name="userId">
     <% users.forEach((user) => { %>
-      <option value="<%= user.id %>" <% if(user.id === setup.userid) {%> checked="checked" <%}%> /><%= user.name %></option>  
-      <% }); %>
-  </select><small>[previous: <%= setup.user_name  %>]</small>
+      <% if(user.id === setup.userid) { %>
+        <option value="<%= user.id %>" selected><%= user.name %></option>  
+      <% } else { %>
+        <option value="<%= user.id %>"><%= user.name %></option>
+      <% } %>    
+    <% }); %>
+  </select>
 </div>  
 <p></p>
 
@@ -31,10 +35,15 @@
   <label for="platformId" class="mb-3"><b>Platform:</b></label>  
   <select name="platformId">
     <% platforms.forEach((platform) => { %>
-      <option value="<%= platform.id %>">
+      <% if(platform.id === setup.platform_id) { %>
+        <option value="<%= platform.id %>" selected>
         <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
-      <% }); %>
-  </select><small>[previous: <%= setup.platform_name  %>(<%= setup.model  %>)]</small>
+      <% } else { %>
+        <option value="<%= platform.id %>">
+        <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>
+      <% } %>  
+    <% }); %>
+  </select>
 </div>  
 <p></p>
 
