@@ -4,6 +4,7 @@ import express, { request } from 'express';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
+import jsSHA from 'jssha';
 
 /* POSTGRESQL STACK BELOW */
 /* Connecting database to server */
@@ -50,7 +51,7 @@ const showSetupSheet = (req, res) =>{
   const { setupId } = req.params;
   const setupIndex = [setupId];
   console.log(setupIndex);
-  const setupSheetQuery = 'SELECT setups.id, users.name AS user_name, platforms.brand AS platform_brand, platforms.name AS platform_name, platforms.model, bodyshells.brand AS bs_brand, bodyshells.name AS bs_name, bodyshells.variant AS bs_variant, events.name AS event_name, tracks.name AS track_name, tracks.surface, tracks.layout, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore,tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght, wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl, wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos, susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos,susp_frnt_pist_holes, susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness, susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound, camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness FROM setups INNER JOIN users ON setups.userid = users.id INNER JOIN platforms ON platform_id = platforms.id INNER JOIN bodyshells ON bodyshell_id = bodyshells.id INNER JOIN events ON setup_event_id = events.id INNER JOIN setups_tracktimes ON setups_tracktimes.setup_id = setups.id INNER JOIN tracktimes ON setups_tracktimes.tracktime_id = tracktimes.id INNER JOIN tracks ON tracks.id = tracktimes.track_id WHERE setups.id = $1;';
+  const setupSheetQuery = 'SELECT setups.id, setups.name AS setup_name, users.name AS user_name, platforms.brand AS platform_brand, platforms.name AS platform_name, platforms.model, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore,tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght, wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl, wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos, susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos,susp_frnt_pist_holes, susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness, susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound, camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness FROM setups INNER JOIN users ON setups.userid = users.id INNER JOIN platforms ON platform_id = platforms.id WHERE setups.id = $1;';
 
   pool.query(setupSheetQuery, setupIndex, (setupErr, setupResults) => {
     if (setupErr) {
@@ -62,20 +63,11 @@ const showSetupSheet = (req, res) =>{
 
     const content = {
       index: setupId,
-      driverName: resultOut?.user_name,
+      setupName: resultOut.setup_name,
+      creator: resultOut?.user_name,
       platformBrand: resultOut?.platform_brand,
       platformName: resultOut?.platform_name,
       model: resultOut?.model,
-      bsBrand: resultOut?.bs_brand,
-      bsName: resultOut?.bs_name,
-      bsVariant: resultOut?.bs_variant,
-      eventName: resultOut?.event_name,
-      track: resultOut?.track_name,
-      surface: resultOut?.surface,
-      layout: resultOut?.layout,
-      direction: resultOut?.direction,
-      lapCount: resultOut?.lapcount,
-      totalTime: resultOut?.total_time,
       motor: resultOut?.motor_size,
       turns: resultOut?.motor_turn,
       escSize: resultOut.esc_size,
@@ -124,35 +116,31 @@ const showDashBoard = (req, res) => {
  res.render('userDashBoard');
 };
 
+
 const showNewSetupForm = (req, res) => {
   const results = Promise.all([
-    pool.query('SELECT * FROM users;'),
-    pool.query('SELECT * FROM platforms'),
-    pool.query('SELECT * FROM bodyshells'),
-    pool.query('SELECT * FROM events'),
-    pool.query('SELECT * FROM tracks'),
-/*     pool.query('SELECT * FROM tracktimes'), */
-    
+    pool.query('SELECT * FROM users ORDER BY name ASC;'),
+    pool.query('SELECT * FROM platforms ORDER BY brand ASC;'),
   ]).then((allResults) => {
     /* console.log(allResults); */
-    console.log(allResults[0].rows);
-    console.log(allResults[1].rows);
-    console.log(allResults[2].rows);
-    console.log(allResults[3].rows);
-    console.log(allResults[4].rows);
-    /* console.log(allResults[5].rows); */
-  });
-  
+    /* console.log(allResults[0].rows); */
+    /* console.log(allResults[1].rows); */
+    /* HAS TO BE CHANGED TO USER GIVEN BY COOKIES */
+    const content = { users: allResults[0].rows, platforms: allResults[1].rows };
+    /* console.log(content.users[0].name); */
 
-  /* res.send('testing new Promise setup. See console messages.'); */
-  res.render('newSetupSheet');
+    res.render('newSetupSheet', content);
+  });
 };
 
 const sendNewSetup = (req, res) => {
   const formSubmitted = req.body;
   const formData = JSON.parse(JSON.stringify(formSubmitted));
-  console.log(formData);
+  console.log('formData =', formData);
   const setupInput = [
+    formData.setupName,
+    formData.userId,
+    formData.platformId,
     formData.motor_size,
     formData.motor_turn,
     formData.esc_size,
@@ -173,37 +161,104 @@ const sendNewSetup = (req, res) => {
     formData.wt_distro_fl_rr,
     formData.ride_ht_front,
     formData.ride_ht_rear,
-    formData.susp_frnt_top_pos,
-    formData.susp_frnt_btn_pos,
-    formData.susp_rear_top_pos,
-    formData.susp_rear_btn_pos,
-    formData.susp_frnt_pist_holes,
-    formData.susp_rear_pist_holes,
-    formData.susp_frnt_spring_hardness,
-    formData.susp_rear_spring_hardness,
-    formData.susp_frnt_oil_wt,
-    formData.susp_rear_oil_wt,
-    formData.susp_frnt_rebound,
-    formData.susp_rear_rebound,
-    formData.camber_frnt,
-    formData.camber_rear,
-    formData.caster_frnt,
-    formData.toe_out_frnt,
-    formData.toe_in_rear,
-    formData.anti_roll_frnt_wire_thickness,
-    formData.anti_roll_rear_wire_thickness,
+    formData.susFrntTopPos,
+    formData.susFrntBtnPos,
+    formData.susRearTopPos,
+    formData.susRearBtnPos,
+    formData.susFrntPistHoles,
+    formData.susRearPistHoles,
+    formData.susFrntSpring,
+    formData.susRearSpring,
+    formData.susFrntOil,
+    formData.susRearOil,
+    formData.susFrntRebound,
+    formData.susRearRebound,
+    formData.camberFrnt,
+    formData.camberRear,
+    formData.casterFrnt,
+    formData.toeFrnt,
+    formData.toeRear,
+    formData.antiRollFrnt,
+    formData.antiRollRear,
   ];
 
-  const newSetupQuery = 'INSERT INTO setups (motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore, tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght,wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl,wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos,susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos, susp_frnt_pist_holes,susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness,susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound,camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear,anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness) VALUES ($1, $2,$3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39);';
+  const newSetupQuery = 'INSERT INTO setups (name, userid, platform_id, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore, tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght,wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl,wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos,susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos, susp_frnt_pist_holes,susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness,susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound,camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness) VALUES ($1, $2,$3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42) RETURNING id;';
 
   pool.query(newSetupQuery, setupInput, (errorSetup, resultsSetup) => {
     if(errorSetup) {
-      console.log('Error at Setup Query Submission', errorSetup);
+      console.log('ERROR @ SETUP QUERY =', errorSetup);
       return;
     }
-    res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.');
+    const setupId = resultsSetup.rows[0].id;
+    /* res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.'); */
+    res.redirect(301, `http://localhost:${port}/setup/${setupId}`);
   });
 };
+
+const showSetupEdit = (req, res) => {
+  const { setupId } = req.params;
+  const setupIndexData = [setupId];
+  const results = Promise.all([
+    pool.query('SELECT * from users ORDER BY name ASC;'),
+    pool.query('SELECT * FROM platforms ORDER BY brand ASC;'),
+    pool.query('SELECT setups.id, setups.name, users.name AS user_name, platforms.brand AS platform_brand, platforms.name AS platform_name, platforms.model, motor_size, motor_turn, esc_size, esc_setting, fdr, tires_brand, tires_frnt_shore,tires_rear_shore, diff_frnt_type, diff_frnt_oil_wght, diff_rear_type, diff_rear_oil_wght, wt_distro_front, wt_distro_rear, wt_distro_lft, wt_distro_rht, wt_distro_fr_rl, wt_distro_fl_rr, ride_ht_front, ride_ht_rear, susp_frnt_top_pos, susp_frnt_btn_pos, susp_rear_top_pos, susp_rear_btn_pos,susp_frnt_pist_holes, susp_rear_pist_holes, susp_frnt_spring_hardness, susp_rear_spring_hardness, susp_frnt_oil_wt, susp_rear_oil_wt, susp_frnt_rebound, susp_rear_rebound, camber_frnt, camber_rear, caster_frnt, toe_out_frnt, toe_in_rear, anti_roll_frnt_wire_thickness, anti_roll_rear_wire_thickness FROM setups INNER JOIN users ON setups.userid = users.id INNER JOIN platforms ON platform_id = platforms.id WHERE setups.id = $1;', setupIndexData),
+  ]).then((allResults) => {
+    const content = {
+      id: setupId,
+      users: allResults[0].rows,
+      platforms: allResults[1].rows,
+      setup: allResults[2].rows[0],
+    };
+/*     console.log('setup motor_size=', content.setup.motor_size);
+    console.log('Mechanic name =', content.setup.user_name); */
+    res.render('editSetup', content);
+  });
+}
+
+const sendEditedSetup = (req, res) => {
+  /* console.log('req.params =', req.params); */
+  const { setupId } = req.params;
+  const setupEditData = JSON.parse(JSON.stringify(req.body));
+  /* console.log('setupEditData =', setupEditData); */
+  const editInputsArr = Object.values(setupEditData);
+  editInputsArr.push(setupId);
+  console.log('editInputsArr =', editInputsArr);
+  const editSetupQuery = 'UPDATE setups SET name = $1, userid = $2, platform_id = $3,motor_size = $4, motor_turn = $5, esc_size = $6, esc_setting = $7, fdr = $8,tires_brand = $9, tires_frnt_shore = $10, tires_rear_shore = $11,diff_frnt_type = $12, diff_frnt_oil_wght = $13, diff_rear_type = $14, diff_rear_oil_wght = $15,wt_distro_front = $16, wt_distro_rear = $17, wt_distro_lft = $18, wt_distro_rht = $19, wt_distro_fr_rl = $20, wt_distro_fl_rr = $21, ride_ht_front = $22, ride_ht_rear = $23, susp_frnt_top_pos = $24, susp_frnt_btn_pos = $25,susp_frnt_pist_holes = $26, susp_frnt_spring_hardness = $27, susp_frnt_oil_wt = $28,susp_frnt_rebound = $29, susp_rear_top_pos = $30, susp_rear_btn_pos = $31, susp_rear_pist_holes = $32, susp_rear_spring_hardness = $33, susp_rear_oil_wt = $34,susp_rear_rebound = $35, caster_frnt = $36, camber_frnt = $37, camber_rear = $38,toe_out_frnt = $39, toe_in_rear = $40, anti_roll_frnt_wire_thickness = $41,anti_roll_rear_wire_thickness = $42 WHERE id = $43;';
+  pool.query(editSetupQuery, editInputsArr, (err, results) => {
+    if (err) {
+      console.log('ERROR @ editSetupQuery submission = ', err);
+      return;
+    }
+    res.redirect(301, `http://localhost:${port}/setup/${setupId}`);
+  });
+};
+
+const showAllSetups = (req, res) => {
+  const queryAllSetups = 'SELECT setups.id, setups.name, platforms.brand, platforms.name AS platform_name, setups.motor_turn, setups.fdr, setups.name AS setup_name, users.name AS user_name FROM setups INNER JOIN platforms  ON setups.platform_id = platforms.id INNER JOIN users ON setups.userid = users.id ORDER BY setups.id ASC;';
+  pool.query(queryAllSetups, (err, results) => {
+    if(err) {
+      console.log('ERROR @ queryAllSetups =', err);
+      return;
+    }
+    console.log(results.rows);
+    const content = { setups: results.rows,};
+    res.render('setups', content);
+  });
+};
+
+const deleteSetup = (req, res) => {
+  const { setupId } = req.params;
+  const delDataId = [ setupId ];
+  const delSetupQuery = 'DELETE FROM setups WHERE id = $1;';
+  pool.query(delSetupQuery, delDataId, (err, results) => {
+    if(err) {
+      console.log('ERROR @ delSetupQuery submission =', err);
+      return;
+    }
+    res.redirect(301, `http://localhost:${port}/setups`)
+  });
+};
+
 
 const showAllPlatforms = (req, res) => {
   const queryAllPlatforms = 'SELECT * FROM platforms;';
@@ -228,19 +283,6 @@ const showAllTypes = (req, res) => {
     console.log(typeResults.rows);
     const content = { types: typeResults.rows };
     res.render('types', content);
-  });
-};
-
-const showAllCategories = (req, res) => {
-  const queryAllCategories = 'SELECT * FROM categories;';
-  pool.query(queryAllCategories, (catErrors, catResults) => {
-    if (catErrors) {
-      console.log('ERROR @ CATEGORY QUERY =', catErrors);
-      return;
-    }
-    console.log(catResults.rows);
-    const content = { categories: catResults.rows };
-    res.render('categories', content);
   });
 };
 
@@ -270,19 +312,6 @@ const showAllTracks = (req, res) => {
   });
 };
 
-const showAllTrackTimes = (req, res) => {
-  const queryAllTrackTimes = 'SELECT * FROM TrackTimes;';
-  pool.query(queryAllTrackTimes, (trackTimesErrors, trackTimesResults) => {
-    if (trackTimesErrors) {
-      console.log('ERROR @ TRACKTIMES QUERY =', trackTimesErrors);
-      return;
-    }
-    console.log(trackTimesResults.rows);
-    const content = { tracktimes: trackTimesResults.rows };
-    res.render('tracktimes', content);
-  });
-};
-
 const showAllBodyshells = (req, res) => {
   const queryAllBodyshells = 'SELECT * FROM bodyshells;';
   pool.query(queryAllBodyshells, (bodyshellsErrors, bodyshellsResults) => {
@@ -309,32 +338,251 @@ const showAllUsers = (req, res) => {
   });
 };
 
-/* ROUTES */
-app.get('/setup/:setupId', showSetupSheet); /* Single Setup Page */
-app.get('/setup', showNewSetupForm); /* Create New Setup */
-app.post('/setup', sendNewSetup); /* Post Setup body */
+const showAllTrackTimes = (req, res) => {
+  const queryAllTrackTimes = 'SELECT tracktimes.id AS tracktimes_id, date, event_name, tracks.name AS track_name, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, setups.id AS setup_id, setups.name AS setup_name, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id ORDER BY tracktimes_id ASC;';
+  pool.query(queryAllTrackTimes, (trackTimesErrors, trackTimesResults) => {
+    if (trackTimesErrors) {
+      console.log('ERROR @ TRACKTIMES QUERY =', trackTimesErrors);
+      return;
+    }
+    console.log(trackTimesResults.rows);
+    const content = { tracktimes: trackTimesResults.rows };
+    res.render('tracktimes', content);
+  });
+};
 
-app.get('/categories', showAllCategories); /* Show All Categories */
+
+const showNewTracktimeForm = (req, res) => {
+  const results = Promise.all([
+    pool.query('SELECT * FROM tracks ORDER BY name ASC'),
+    pool.query('SELECT * FROM users ORDER BY name ASC;'),
+    pool.query('SELECT * FROM types'),
+    pool.query('SELECT * FROM platforms ORDER BY brand ASC'),
+    pool.query('SELECT * FROM setups ORDER BY name'),
+    pool.query('SELECT * FROM bodyshells ORDER by brand ASC'),
+  ]).then((allResults) => {
+    /* console.log(allResults); */
+/*     console.log(allResults[0].rows);
+    console.log(allResults[1].rows);
+    console.log(allResults[2].rows);
+    console.log(allResults[3].rows);
+    console.log(allResults[4].rows);
+    console.log(allResults[5].rows); */
+    /* res.send('testing new Promise setup. See console messages.'); */
+    const content = {
+      tracks: allResults[0].rows,
+      users: allResults[1].rows,
+      types: allResults[2].rows,
+      platforms: allResults[3].rows,
+      setups: allResults[4].rows,
+      bodyshells: allResults[5].rows,
+    };
+    res.render('newTracktimes', content);
+  });
+};
+
+const sendNewTracktime = (req, res) => {
+const formSubmitted = req.body;
+const formData = JSON.parse(JSON.stringify(formSubmitted));
+const tracktimeInput = [
+formData.date,
+formData.event_name,
+formData.trackId,
+formData.direction,
+formData.userId,
+formData.lapcount,
+formData.total_time,
+formData.typeId,
+formData.platformId,
+formData.setupId,
+formData.bodyshell_id,
+];
+const insertNewTimes = 'INSERT into tracktimes (date, event_name, track_id, direction, tracktime_user_id, lapcount, total_time, tracktime_type_id, tracktime_platform_id, tracktime_setup_id, tracktime_bodyshell_id) VALUES($1, $2, $3, $4, $5,$6, $7,$8, $9, $10, $11) RETURNING id;';
+
+pool.query(insertNewTimes, tracktimeInput, (errorTracktime, resultsTracktime) => {
+    if (errorTracktime) {
+      console.log('ERROR @ INSERT TRACKTIME QUERY =', errorTracktime);
+      return;
+    }
+    const tracktimeId = resultsTracktime.rows[0].id;
+    console.log('tracktimeId = ', tracktimeId);
+    /* res.send('Insert Tracktime data successfully sent out, please check database side.'); */
+    res.redirect(301, `http://localhost:${port}/tracktimes`);
+  });
+};
+
+const showTracktimeEdit = (req, res) => {
+  const { tracktimeId } = req.params;
+  const tracktimeIndexData = [tracktimeId];
+  const results = Promise.all([
+    pool.query('SELECT * FROM tracks ORDER BY name ASC;'),
+    pool.query('SELECT * FROM users ORDER BY name ASC;'),
+    pool.query('SELECT * FROM types;'),
+    pool.query('SELECT * FROM platforms;'),
+    pool.query('SELECT * FROM setups;'),
+    pool.query('SELECT * FROM bodyshells ORDER BY brand ASC;'),
+    pool.query('SELECT tracktimes.id AS tracktimes_id, date, event_name, tracks.name AS track_name, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, setups.id AS setup_id, setups.name AS setup_name, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
+  ]).then((allResults) => {
+    /* console.log('allResults[6].rows =', allResults[6].rows); */
+    const content = {
+      id: tracktimeId,
+      tracks: allResults[0].rows,
+      users: allResults[1].rows,
+      types: allResults[2].rows,
+      platforms: allResults[3].rows,
+      setups: allResults[4].rows,
+      bodyshells: allResults[5].rows,
+      tracktime: allResults[6].rows[0],
+    };
+    res.render('editTracktime', content);
+  });
+};
+
+const sendEditedTracktime = (req, res) => {
+  const { tracktimeId } = req.params;
+  const tracktimeEditData = JSON.parse(JSON.stringify(req.body));
+  /* console.log('tracktimeEditData =', tracktimeEditData); */
+  const tracktimeEditInput = Object.values(tracktimeEditData);
+  tracktimeEditInput.push(tracktimeId);
+  console.log('tracktimeEditInput =', tracktimeEditInput);
+  const editTracktimeQuery = 'UPDATE tracktimes SET date = $1, event_name = $2, track_id = $3, tracktime_user_id = $4, direction = $5, lapcount = $6, total_time = $7, tracktime_type_id = $8, tracktime_platform_id = $9, tracktime_setup_id = $10, tracktime_bodyshell_id = $11 WHERE id = $12;';
+  pool.query(editTracktimeQuery, tracktimeEditInput, (err, results) => {
+    if(err) {
+      console.log('ERROR @ editTracktimeQuery submission =', err);
+      return;
+    }
+    /* res.send('sending tracktime test- see console for data details'); */
+    res.redirect(301, `http://localhost:${port}/tracktimes`);
+  });
+};
+
+const deleteTracktime = (req, res) => {
+  const { tracktimeId } = req.params;
+  const delTracktimeData = [tracktimeId];
+  const delTrackTimeQuery = 'DELETE FROM tracktimes WHERE id = $1';
+   pool.query(delTrackTimeQuery, delTracktimeData, (err, results) => {
+    if(err) {
+      console.log('ERROR @ delTrackTimeQuery submission =', err);
+      return;
+    }
+    res.redirect(301, `http://localhost:${port}/tracktimes`);
+  });
+};
+
+const generateHash = (input) => {
+    const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' });
+    shaObj.update(input);
+    return shaObj.getHash('HEX'); /* hashedString */
+};
+
+
+
+const showSignUpPage = (req, res) => {
+  res.render('signUp');
+};
+
+const sendSignUpData = (req, res) => {
+  const hashedPassword = generateHash(req.body.password);
+
+  /* store the hashed password in our DB */
+  const values = [req.body.name, req.body.email, hashedPassword];
+  const passwordQuery = 'INSERT INTO users (name, email, hashed_password) VALUES ($1, $2, $3);';
+  pool.query(passwordQuery, values, (err, results) => {
+    if(err) {
+      console.log('ERROR @ passwordQuery =', err);
+      return;
+    }
+    res.send('hashed passwords created');
+  });
+};
+
+
+const showLoginPage = (req, res) => {
+  res.render('userLoginPage');
+};
+
+const sendLoginData = (req, res) => {
+  /* retrieve the user entry using their email */
+  const values = [req.body.email];
+  const emailPassQuery ='SELECT * from users WHERE email = $1;';
+  pool.query(emailPassQuery, values, (err, results) => {
+    if(err){
+      console.log('ERROR @ emailPassQuery =', err);
+      return;
+    }
+    /* if we didnt find that user with that email */
+    if (results.rows.length === 0) {
+      res.status(403).send('login failed!');
+      return; 
+    }
+    /* get user record from results */
+    const user = results.rows[0];
+    /* if enteredPassword doesn't match with hashPass from dB */
+    const enteredPassword = generateHash(req.body.password);
+    if (user.hashed_password !== enteredPassword ) {
+      res.status(403).send('login failed!');
+      return;
+    }
+    /* if enteredPasswordHash matches that in the DB, we authenticate the user */
+    res.cookie('loggedIn, true');
+    res.redirect(301, `http://localhost:${port}/user-dashboard`);
+  });
+};
+
+const showLoggedOut = (req, res) => {
+  res.clearCookie('loggedIn'); 
+  console.log('All cookies cleared');
+  res.render('userLogoutPage');
+};
+
+
+/* ROUTES */
+/* SINGULAR SETUP PAGE */
+app.get('/setup/:setupId', showSetupSheet); /* Single Setup Page */
+app.get('/setup', showNewSetupForm); /* Page to Create New Setup */
+app.post('/setup', sendNewSetup); /* Post Setup body */
+/* EDIT SETUP */
+app.get('/setup/:setupId/edit', showSetupEdit); /* Page: Edit Setup  */
+app.put('/setup/:setupId', sendEditedSetup); /* Send editSetup Data */
+/* ALL SETUP PAGES */
+app.get('/setups', showAllSetups); /* Show All Setups */
+/* DELETE SPECIFIC SETUP Page */
+app.delete('/setup/:setupId', deleteSetup); /* Delete specific Setup */
+
+
+/* TRACKTIMES PAGE */
+app.get('/tracktimes', showAllTrackTimes); /* Show All Track Times */
+app.get('/tracktime', showNewTracktimeForm); /* Record new tracktime Page */
+app.post('/tracktime', sendNewTracktime); /* Send New Tracktime Data */
+/* EDIT TRACKTIME */
+app.get('/tracktime/:tracktimeId/edit', showTracktimeEdit); /* Page: Edit Tt */
+app.put('/tracktime/:tracktimeId', sendEditedTracktime); /* Send editTt data */
+/* DELETE SPECIFIC TRACKTIME PAGE */
+app.delete('/tracktime/:tracktimeId', deleteTracktime); /* Delete specific Tracktime */ 
+
+
 app.get('/types', showAllTypes); /* Show All Types */
 app.get('/platforms', showAllPlatforms); /* List All Platforms */
-app.get('/events', showAllEvents); /* Show All Events */
 app.get('/tracks', showAllTracks); /* Show All Tracks */
-app.get('/tracktimes', showAllTrackTimes); /* Show All Track Times */
 app.get('/bodyshells', showAllBodyshells); /* Show All Bodies */
 app.get('/users', showAllUsers); /* Show All Users */
 
-
-
-/* ROUTE: USER DASHBOARD PAGE */
+/* USER LOGINS, AUTH, ETC,  */
 app.get('/user-dashboard', showDashBoard);
+/* 
+CREATE NEW USER ACCOUNT */
+app.get('/signUp', showSignUpPage); /* New User Sign Up Page */
+app.post('/signUp', sendSignUpData);
 
 
-/* ALL SETUP SHEETS OF USER */
+app.get('/login', showLoginPage); /* Login Page */
+app.post('/login', sendLoginData); /* Post Login Data from front-end to backend */
 
 
+app.delete('/logOut', showLoggedOut); /* LogOut Page */ 
 
 /* ALL PLATFORMS OF USER */
-/* ALL EVENTS ON SERVER */
+
 
 
 

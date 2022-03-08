@@ -1,10 +1,7 @@
-INSERT INTO users ( name ) VALUES 
-('Lewis Hamilton');
-
-
-INSERT INTO categories ( name ) VALUES 
-('OFFROAD'),
-('ONROAD');
+INSERT INTO users ( name, email, hashed_password ) VALUES 
+('Lewis Hamilton', 'Lewis@SilverArrows.com', '5af0c6c085fcd91b5cc2ceea2e566220a0c2f64bc0ee059632136bcf92d2a015f54ebd6f6bf7478062ded1f7f3a4b07101ccf7c081abdfd2d00a9b5d6119e826' ),
+('Valerie Bottas', 'Valerie@SilverArrows.com', 'ecb0cf4985d998b2b66cabc99c1ea29ba854fbbccc73b95c0c733f6b11bdad836bf946a84f4154748545c540184d253bf6d8e2b7c4dfd4f02241fd9084f78a40'),
+('Fernando Alonso', 'Fernando@McLaren.com', 'ecb0cf4985d998b2b66cabc99c1ea29ba854fbbccc73b95c0c733f6b11bdad836bf946a84f4154748545c540184d253bf6d8e2b7c4dfd4f02241fd9084f78a40');
 
 INSERT INTO types (name) VALUES
 ('1/10 ELECTRIC TC'),
@@ -16,30 +13,22 @@ INSERT INTO bodyshells (bodyshell_type_id, brand, name, bs_model, variant) VALUE
 (1, 'ZOORACING', 'DOGSBOLLOX', 'ZR-0005-05', 'ULTRALIGHT');
 
 
-INSERT INTO platforms (category_id, platform_type_id, brand, name, model ) VALUES 
-(2, 1, '3Racing', 'ADVANCE 21M', 'KIT-ADVANCE 21M' );
+INSERT INTO platforms (platform_type_id, brand, name, model ) VALUES 
+(1, '3Racing', 'ADVANCE 21M', 'KIT-ADVANCE 21M' ),
+(1, 'Mugen Seki', 'MTC2', 'A2003-A'),
+(1, 'Mugen Seki', 'MTC2', 'A2003-C'),
+(1, 'XRAY', 'T4(2020)', '300026');
 
 
 INSERT INTO tracks (name, climate, surface, layout, location) VALUES 
 ('Tsukuba RC Park', 'INDOOR', 'CARPET', 'TECHNICAL', 'Ibaraki, JAPAN'),
 ('Shirakaba 2in1 Circuit', 'OUTDOOR', 'ASPHALT', 'MIXED', 'NAGANO, JAPAN');
 
-
-INSERT INTO events (name, date, event_type_id, event_user_id, event_track_id) VALUES 
-('2018 JMRRCA Japanese National Championship Day 3/3', '2022-07-22', 1, 1, 2 );
-
-
-INSERT INTO tracktimes (event_id, track_id, tracktime_user_id, direction, lapcount, total_time, tracktime_type_id, tracktime_platform_id) VALUES 
-(1, 2, 1, 'CW', 41, '8:10.492', 1, 1); /* change to ms, store in DB as integer or long (if integer is not long enough), use functions at index.js area to convert value when going to front ennd, and then when entering, use function to convert from times back into milliseconds for database storage. */
-
-
 INSERT INTO setups 
 (
+name,  
 userid, 
 platform_id, 
-setup_tracktimes_id,
-setup_event_id,
-bodyshell_id,
 motor_size,
 motor_turn, 
 esc_size,
@@ -80,20 +69,18 @@ toe_in_rear,
 anti_roll_frnt_wire_thickness,
 anti_roll_rear_wire_thickness) 
 VALUES (
-1, 
+'Technical Monster',  
+1,  
 1,
-1,
-1,
-2,
 540,
-17.5,
+'17.5T',
 '120A',
 'BLINKY',
 4.27, 
 'SHIMIZU',
 '36S',
 '36S',
-'spool',
+'SPOOL',
 0,
 'GEAR DIFF',
 5000, 
@@ -105,9 +92,9 @@ VALUES (
 49,
 5.3,
 5.5,
-'center',
+'middle',
 'outer',
-'center',
+'middle',
 'outer',
 3,
 4,
@@ -115,8 +102,8 @@ VALUES (
 'medium',
 450,
 550,
-'zero rebound',
-'zero rebound',
+'zero',
+'zero',
 2.0,
 1.5,
 -0.5, 
@@ -126,5 +113,7 @@ VALUES (
 1.5
 );
 
-INSERT INTO setups_tracktimes (setup_id, tracktime_id) VALUES 
-(1, 1);
+
+INSERT INTO tracktimes ( date, event_name, track_id, direction, tracktime_user_id, lapcount, total_time, tracktime_type_id, tracktime_platform_id, tracktime_setup_id, tracktime_bodyshell_id ) VALUES
+('2017-07-22', '2018 JMRCA Japanese National Championship Day 3/3', 2, 'CW', 1, 41, '8:10.492', 1, 1, 1, 1);
+

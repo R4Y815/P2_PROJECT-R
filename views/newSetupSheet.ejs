@@ -4,61 +4,105 @@
 
 <h3><b>Create New Setup:</b> </h3>
 <div>
+<p></p>  
 <form action="/setup" method="POST">
-<!-- Motor Size -->
+
 <div>
-  <b><u>Motor Size</u></b>
-  <div>
-    <label for="380">380</label>
-    <input type="radio" name="motor_size" id="380" value="380"> 
-  </div>
-  <div>
-    <label for="540">540</label>
-    <input type="radio" name="motor_size" id="540" value="540" checked> 
-  </div>
-    <div>
-    <label for="600">600</label>
-    <input type="radio" name="motor_size" id="600" value="600"> 
-  </div>
-</div>
+  <label for="setupName" class="mb-3" ><b>Setup Name:</b></label>  
+  <input type="text" name="setupName" id="setupName">
+</div>  
+<p></p>  
+<!-- Select from the users table --> 
+<div>
+  <label for="userId" class="mb-3"><b>Setup Mechanic:</b></label>  
+  <select name="userId">
+    <% users.forEach((user) => { %>
+      <option value="<%= user.id %>"><%= user.name %></option>  
+      <% }); %>
+  </select>
+</div>  
 <p></p>
+<!-- Select from the platforms table -->
 <div>
-  <b><u>Motor: No. of Turns</u></b>
+  <label for="platformId" class="mb-3"><b>Platform:</b></label>  
+  <select name="platformId">
+    <% platforms.forEach((platform) => { %>
+      <option value="<%= platform.id %>">
+        <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+      <% }); %>
+  </select>
+</div>  
+<p></p>
+
+
+
+
+
+
+
+<!-- Motor Details -->
+<div>
+  <b><u>Motor:</u></b>
   <div>
-    <label for="4.5">4.5T</label>
-    <input type="radio" name="motor_turn" id="4.5" value="4.5"> 
+    <b>Size:</b>
+    <span>
+      <label for="380"> 380</label>
+      <input type="radio" name="motor_size" id="380" value="380"> 
+    </span>
+    <span>
+      <label for="540">| 540</label>
+      <input type="radio" name="motor_size" id="540" value="540" checked> 
+    </span>
+    <span>
+      <label for="600">| 600</label>
+      <input type="radio" name="motor_size" id="600" value="600"> 
+    </span>
   </div>
+  <p></p>
   <div>
-    <label for="5.5">5.5T</label>
-    <input type="radio" name="motor_turn" id="5.5" value="5.5"> 
-  </div>
-  <div>
-    <label for="7.5">7.5T</label>
-    <input type="radio" name="motor_turn" id="7.5" value="7.5"> 
-  </div>
-  <div>
-    <label for="10.5">10.5T</label>
-    <input type="radio" name="motor_turn" id="10.5" value="10.5"> 
-  </div>
-  <div>
-    <label for="13.5">13.5T</label>
-    <input type="radio" name="motor_turn" id="13.5" value="13.5"> 
-  </div>
-  <div>
-    <label for="15.5">15.5T</label>
-    <input type="radio" name="motor_turn" id="15.5" value="15.5"> 
-  </div>
-  <div>
-    <label for="17.5">17.5T</label>
-    <input type="radio" name="motor_turn" id="17.5" value="17.5" checked> 
-  </div>
+    <b>No. of Turns</b>
     <div>
-    <label for="21.5">21.5T</label>
-    <input type="radio" name="motor_turn" id="21.5" value="21.5"> 
-  </div>
+      <span>
+        <label for="4.5T">|  4.5T</label>
+        <input type="radio" name="motor_turn" id="4.5T" value="4.5T"> 
+      </span>
+      <span>
+        <label for="5.5T">| 5.5T</label>
+        <input type="radio" name="motor_turn" id="5.5T" value="5.5T"> 
+      </span>
+      <span>
+        <label for="7.5T">| 7.5T</label>
+        <input type="radio" name="motor_turn" id="7.5T" value="7.5T"> 
+      </span>
+    </div>
     <div>
-    <label for="25.5">25.5T</label>
-    <input type="radio" name="motor_turn" id="25.5" value="25.5"> 
+      <span>
+        <label for="10.5T">| 10.5T</label>
+        <input type="radio" name="motor_turn" id="10.5T" value="10.5T"> 
+      </span>
+      <span>
+        <label for="13.5T">| 13.5T</label>
+        <input type="radio" name="motor_turn" id="13.5T" value="13.5T"> 
+      </span>
+      <span>
+        <label for="15.5T">| 15.5T</label>
+        <input type="radio" name="motor_turn" id="15.5T" value="15.5T"> 
+      </span>
+    </div>
+    <div>
+      <span>
+        <label for="17.5T">| 17.5T</label>
+        <input type="radio" name="motor_turn" id="17.5T" value="17.5T" checked> 
+      </span>
+      <span>
+        <label for="21.5T">| 21.5T</label>
+        <input type="radio" name="motor_turn" id="21.5T" value="21.5T"> 
+      </span>
+      <span>
+        <label for="25.5T">| 25.5T</label>
+        <input type="radio" name="motor_turn" id="25.5T" value="25.5T"> 
+      </span>
+     </div> 
   </div>
 </div>
 <p></p>
@@ -66,20 +110,20 @@
 <div>
   <b>Max Continuous Current Rating</b>
   <span>
-    <label for="60">: 60A</label>
-    <input type="radio" name="esc_size" id="60" value="60"> 
+    <label for="60A">: 60A</label>
+    <input type="radio" name="esc_size" id="60A" value="60A"> 
   </span>
   <span>
-    <label for="80">| 80A</label>
-    <input type="radio" name="esc_size" id="80" value="80"> 
+    <label for="80A">| 80A</label>
+    <input type="radio" name="esc_size" id="80A" value="80A" checked> 
   </span>
   <span>
-    <label for="120">| 120A</label>
-    <input type="radio" name="esc_size" id="120" value="120"> 
+    <label for="120A">| 120A</label>
+    <input type="radio" name="esc_size" id="120A" value="120A"> 
   </span>
   <span>
-    <label for="300">| 300A</label>
-    <input type="radio" name="esc_size" id="300" value="300"> 
+    <label for="300A">| 300A</label>
+    <input type="radio" name="esc_size" id="300A" value="300A"> 
   </span>
 </div>
 <p></p>
@@ -87,7 +131,7 @@
   <b>ESC Setting Constraints:</b>
   <span>
     <label for="BLINKY">: BLINKY(Stock Timing)</label>
-    <input type="radio" name="esc_setting" id="BLINKY" value="BLINKY"> 
+    <input type="radio" name="esc_setting" id="BLINKY" value="BLINKY" checked> 
   </span>
   <span>
     <label for="MODIFIED">| MODIFIED</label>
@@ -108,15 +152,15 @@
   <b><u>TIRES</u></b>
   <div>
   <label for="tires_brand">Brand:</label>  
-    <input type="text" name="tires_brand" id="tires_brand" placeholder="no_brand">
+    <input type="text" name="tires_brand" id="tires_brand" value="no_brand">
   </div>
   <div>
   <label for="tires_frnt_shore">Front Tire Shore (hardness):</label>  
-    <input type="text" name="tires_frnt_shore" id="tires_frnt_shore" placeholder="37S">
+    <input type="text" name="tires_frnt_shore" id="tires_frnt_shore" value="37S">
   </div>
   <div>
   <label for="tires_rear_shore">Rear Tire Shore (hardness)):</label>  
-    <input type="text" name="tires_rear_shore" id="tires_rear_shore" placeholder="36S">
+    <input type="text" name="tires_rear_shore" id="tires_rear_shore" value ="36S">
   </div>
 </div>
 <p></p>
@@ -124,11 +168,11 @@
   <b><u>Front Differential Type</u></b>
   <div>
     <label for="SPOOL">SPOOL</label>
-    <input type="radio" name="diff_frnt_type" id="SPOOL" value="SPOOL" checked> 
+    <input type="radio" name="diff_frnt_type" id="SPOOL" value="SPOOL"> 
   </div>
   <div>
     <label for="GEAR DIFF">GEAR DIFF</label>
-    <input type="radio" name="diff_frnt_type" id="GEAR DIFF" value="GEAR DIFF"> 
+    <input type="radio" name="diff_frnt_type" id="GEAR DIFF" value="GEAR DIFF" checked> 
   </div>
   <div>
     <label for="BALL DIFF">BALL DIFF</label>
@@ -209,26 +253,26 @@
     Front Shockbody on Shock Tower Position
     <span>
      <label for="inner">: inner</label>
-     <input type="radio" name="susp_frnt_top_pos" id="inner" value="inner"> 
+     <input type="radio" name="susFrntTopPos" id="inner" value="inner"> 
     </span>
     <span>
      <label for="middle">| middle</label>
-     <input type="radio" name="susp_frnt_top_pos" id="middle" value="middle" checked> 
+     <input type="radio" name="susFrntTopPos" id="middle" value="middle" checked> 
     </span>
     <span>
      <label for="outer">| outer</label>
-     <input type="radio" name="susp_frnt_top_pos" id="outer" value="outer"> 
+     <input type="radio" name="susFrntTopPos" id="outer" value="outer"> 
     </span>
   </div>
   <div>
     Front Piston Arm on Swing Arm Position
     <span>
      <label for="inner">: inner</label>
-     <input type="radio" name="susp_susFrntBtnPos" id="inner" value="inner"> 
+     <input type="radio" name="susFrntBtnPos" id="inner" value="inner"> 
     </span>
     <span>
      <label for="outer">| outer</label>
-     <input type="radio" name="susp_susFrntBtnPos" id="outer" value="outer" checked> 
+     <input type="radio" name="susFrntBtnPos" id="outer" value="outer" checked> 
     </span>
   </div>
   <div>
@@ -237,7 +281,7 @@
   </div>
   <div>
     <label for="susFrntSpring">Front Suspension Spring Stiffness (colour, nmbrCode or description): </label>  
-    <input type="text" name="susFrntSpring" id="susFrntSpring">
+    <input type="text" name="susFrntSpring" id="susFrntSpring" value="medium">
   </div>
   <div>
     <label for="susFrntOil">Front Suspension Oil Weight(viscosity)(cP/ct):</label>  
@@ -266,26 +310,26 @@
     Rear Suspension Head on Shock Tower Position
     <span>
      <label for="inner">: inner</label>
-     <input type="radio" name="susp_rear_top_pos" id="inner" value="inner"> 
+     <input type="radio" name="susRearTopPos" id="inner" value="inner"> 
     </span>
     <span>
      <label for="middle">| middle</label>
-     <input type="radio" name="susp_rear_top_pos" id="middle" value="middle" checked> 
+     <input type="radio" name="susRearTopPos" id="middle" value="middle" checked> 
     </span>
     <span>
      <label for="outer">| outer</label>
-     <input type="radio" name="susp_rear_top_pos" id="outer" value="outer"> 
+     <input type="radio" name="susRearTopPos" id="outer" value="outer"> 
     </span>
   </div>
   <div>
     Rear Piston Arm on Swing Arm Position
     <span>
      <label for="inner">: inner</label>
-     <input type="radio" name="susp_susRearBtnPos" id="inner" value="inner"> 
+     <input type="radio" name="susRearBtnPos" id="inner" value="inner"> 
     </span>
     <span>
      <label for="outer">| outer</label>
-     <input type="radio" name="susp_susRearBtnPos" id="outer" value="outer" checked> 
+     <input type="radio" name="susRearBtnPos" id="outer" value="outer" checked> 
     </span>
   </div>
   <div>
@@ -294,11 +338,11 @@
   </div>
   <div>
     <label for="susRearSpring">Rear Suspension Spring Stiffness (colour, nmbrCode or description): </label>  
-    <input type="text" name="susRearSpring" id="susRearSpring">
+    <input type="text" name="susRearSpring" id="susRearSpring" value="medium">
   </div>
   <div>
-    <label for="susFrntOil">Rear Suspension Oil Weight(viscosity)(cP/ct):</label>  
-    <input type="number" name="susFrntOil" id="susFrntOil" min="100" step="50" max="800" value="500">
+    <label for="susRearOil">Rear Suspension Oil Weight(viscosity)(cP/ct):</label>  
+    <input type="number" name="susRearOil" id="susRearOil" min="100" step="50" max="800" value="500">
   </div>
   <div>
     Rear Shock Rebound Setting
@@ -314,6 +358,14 @@
      <label for="full">| full</label>
      <input type="radio" name="susRearRebound" id="full" value="full"> 
     </span>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CASTER SETTINGS</u></b>
+  <div>
+    <label for="casterFrnt">Front Caster:</label>  
+    <input type="number" name="casterFrnt" id="casterFrnt" min="-3" step="0.5" max="4" value="3"> deg.
   </div>
 </div>
 <p></p>

@@ -6,36 +6,61 @@
 
 
 <% tracktimes.forEach((tracktimes) => { %>
+<h4><b><u>TrackTime ID</u></b>: <%= tracktimes.tracktimes_id %></h4>
 <div>
-  <span>
-    ID: <%= tracktimes.id %>）
-  </span>
-  <span>
-  | EVENT: <%= tracktimes.event_id %>
-  </span>
-  <span>
-  | TRACK: <%= tracktimes.track_id %>
-  </span>
-  <span>
-  | USER: <%= tracktimes.tracktime_user_id %>
-  </span>
-  <span>
-  | Direction: <%= tracktimes.direction %>
-  </span>
-  <span>
-  | No. of Laps: <%= tracktimes.lapcount %>
-  </span>
-  <span>
-  | Total Time: <%= tracktimes.total_time %>
-  </span>    
-  <span>
-  | Type: <%= tracktimes.tracktime_type_id %>
-  </span>     
-  <span>
-  | Chassis: <%= tracktimes.tracktime_platform_id %>
-  </span>        
+  <form action="/tracktime/<%= tracktimes.tracktimes_id %>/edit" method="GET">  
+    <button type="submit" class="btn-sm">EDIT Tracktime <%= tracktimes.tracktimes_id %> </button>
+  </form>
 </div>
+<p></p>
+<div>
+  <div>
+    <b>Date</b>: <%= tracktimes.date %>    
+  </div>
+  <div>
+    <b>Event</b>: <%= tracktimes.event_name %>
+  </div>
+  <div>
+    <b>Track Name</b>: <%= tracktimes.track_name %>
+  </div>
+  <div>
+     <b>Direction</b>: <%= tracktimes.direction %>
+  </div>
+  <div>
+     | <b>Driver</b>: <%= tracktimes.user_name %>
+  </div>
+  <div>
+    <div>
+      | <b>Laps Completed</b>: <%= tracktimes.lapcount %>
+    </div>
+    <div>
+  |   <b>Total Time</b>: <%= tracktimes.total_time %>
+    </div>         
+  </div>
+  <div>
+    <div>
+      <b>Platform Type</b>: <%= tracktimes.type_name %>
+    </div>
+    <div>
+      <b>Chassis</b>: <%= tracktimes.platform_brand %> <%= tracktimes.platform_name %> (<%= tracktimes.platform_model %>) 
+    </div>
+    <div>
+      <b>Chassis Setup:</b>[<%= tracktimes.setup_id %>-<%= tracktimes.setup_name %>]
+    </div>
+  </div>
+  <div>
+    <div>
+      <b>Bodyshell</b>: <%= tracktimes.bodyshell_brand %> <%= tracktimes.bodyshell_name %> (<%= tracktimes.bodyshell_variant %>)  
+  </div>             
+</div>
+<p></p>
+
+  <div>
+    <form action="/tracktime/<%= tracktimes.tracktimes_id %>?_method=DELETE" method="POST">  
+    <button type="submit" class="btn-sm">DELETE Tracktime <%= tracktimes.tracktimes_id %> </button>
+    </form>  
+  </div>
+<p></p>
+<hr/>  
 <% }); %>  
-
-
 <%-include('z_footerGlobal')-%>

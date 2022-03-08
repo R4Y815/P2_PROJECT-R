@@ -2,61 +2,167 @@
 <h1 class="topSpacer"><p></p>.</h1>
 <h4 class="topSpacer"><p></p>.</h4>
 
-<h3><b>SetupSheet ID:</b> <%= index %></h3>
+<h4><b><u>SetupSheet #<%= index %></u></b></h4>
+<div>
+  <form action="/setup/<%= index %>/edit" method="GET">  
+    <button type="submit" class="btn-sm">EDIT Setup <%= index %> </button>
+  </form>
+</div>
+<p></p>
+<div><b>Setup Name:</b> '<u><%= setupName %></u>'</div>
+<p></p>
+<div><b>Setup Mechanic:</b> <%= creator %></div>
+<p></p>
+<div><b><u>CHASSIS:</u></b> <%= platformBrand %> <%= platformName  %>(<%= model  %>)</div>
+<p></p>
+<div>
+<b><u>MOTOR</u></b>
+<div><b>Size:</b> <%= motor %></div>
+<div><b>Number of Turns:</b> <%= turns %></div>
+</div>
+<p></p>
+<div>
+  <b><u>Electronic Speed Controller (ESC)</u></b>  
+  <div>
+    Max Continuous Current Rating: <%= escSize %>
+  </div>
+  <div>
+    ESC Setting Constraints: <%= escSetting  %>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>Final Drive Ratio (FDR):</u></b> <%= fdr  %>
+</div>
+<p></p>
+<div>
+  <b><u>TIRES</u></b>
+  <div>Brand: <%= tireBrand %></div>
+  <div>Front Tire Shore (hardness): <%= tiresFrntShore  %></div>
+  <div>Rear Tire Shore (hardness): <%= tiresRearShore %></div>
+</div>
+<p></p>
+<div>
+  <b><u>Front Differntial (Diff.) Setup</u></b>
+  <div>
+     Diff. TYPE: <%= diffFrntType %>
+  </div>
+  <div>
+     Diff. Oil Weight/Viscosity (cP/ct): <%= diffFrntOil  %>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>Rear Differntial (Diff.) Setup</u></b>
+  <div>
+    Diff. TYPE: <%= diffRearType %>
+  </div>
+  <div>
+    Diff. Oil Weight/Viscosity (cP/ct): <%= diffRearOil %>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>WEIGHT DISTRIBUTION</u></b>
+  <div><b> FRONT:</b> <%= wtFrnt %>%</div>
+  <div><b> REAR:</b> <%= wtRear %>%</div>
+  <div><b> LEFT:</b> <%= wtLft %>%</div>
+  <div><b> RIGHT:</b> <%= wtRht %>%</div>
+  <div><b> FRRL:</b> <%= wtFRRL %>%</div>
+  <div><b> FLRR:</b> <%= wtFLRR %>%</div>
+</div>
+<p></p>
 
+<div>
+  <b><u>RIDE HEIGHT</u></b>
+  <div>
+    <b>Front Ride Height:</b> <%= rideHtFrnt %> mm
+  </div>
+  <div>
+    <b>Rear Ride Height:</b> <%= rideHtRear %> mm
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>SUSPENSION:</u> FRONT</b>
+  <div>
+    Front Shockbody on Shock Tower Position: <%= susFrntTopPos %> mounting hole
+  </div>
+  <div>
+    Front Piston Arm on Swing Arm Position: <%= susFrntBtnPos %> mounting hole
+  </div>
+  <div>
+    Front Shockbody Piston Setting: <%=  susFrntPistHoles %> holes
+  </div>
+  <div>
+    Front Suspension Spring Stiffness: <%= susFrntSpring %>
+  </div>
+  <div>
+    Front Suspension Oil Weight(viscosity)(cP/ct): <%= susFrntOil %>
+  </div>
+  <div>
+    Front Suspension Rebound Setting: <%=  susFrntRebound %>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>SUSPENSION:</u> REAR</b>
+  <div>
+    Rear Shockbody on Shock Tower Position: <%= susRearTopPos  %> hole 
+  </div>
+  <div>
+    Rear Piston Arm on Swing Arm Position: <%= susRearBtnPos %> hole
+  </div>
+  <div>
+    Rear Shockbody Piston Setting: <%= susRearPistHoles %> holes
+  </div>
+  <div>
+    Rear Suspension Spring Stiffness: <%= susRearSpring %>
+  </div>
+  <div>
+    Rear Suspension Oil Weight(viscosity)(cP/ct) : <%= susRearOil %>
+  </div>
+  <div>
+    Rear Suspension Rebound Setting: <%= susRearRebound %>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CASTER SETTINGS:</u></b>
+  <div>
+    <b>Front Caster:</b> <%= casterFrnt %> deg
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CAMBER SETTINGS:</u></b>
+  <div>
+    <b>Front Wheel Camber:</b> <%= camberFrnt %> deg
+  </div>
+  <div>
+    <b>Rear Wheel Camber:</b> <%= camberRear %> deg
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CAMBER SETTINGS:</u></b>
+  <div>
+    <b>Front Toe (Toe-Out) :</b> <%= toeFrnt %> deg
+  </div>
+  <div>
+    <b>Rear Toe (Toe-In)  :</b> <%= toeRear %> deg
+  </div>
+</div>
+<p></p>
 
-<div><b>Driver/Mechanic: </b><%= driverName %></div>
-<div><b>Chassis brand:</b> <%= platformBrand %></div>
-<div><b>Chassis name:</b> <%= platformName  %></div>
-<div><b>Model No.:</b> <%= model  %></div>
-<div><b>Bodyshell brand:</b> <%= bsBrand %></div>
-<div><b>Bodyshell name:</b> <%= bsName  %></div>
-<div><b>Bodyshell variant:</b> <%= bsVariant %></div>
-<div><b>Event:</b> <%= eventName %></div>
-<div><b>Track Name:</b> <%= track %></div>
-<div><b>Track surface:</b> <%= surface  %></div>
-<div><b>Track Layout type:</b> <%= layout  %></div>
-<div><b>Direction:</b> <%= direction %></div>
-<div><b>Laps Counted:</b> <%= lapCount %> </div>
-<div><b>Total Time ( mins : s : ms):</b> <%= totalTime%> </div>
-<div><b>Motor Size:</b> <%= motor %></div>
-<div><b>Turns:</b> <%= turns %>T</div>
-<div><b>Electronic Speed Controller (ESC) Size:</b> <%= escSize %></div>
-<div><b>ESC Setting:</b> <%= escSetting  %></div>
-<div><b>Final Drive Ratio (FDR):</b> <%= fdr  %></div>
-<div><b>Tire Brand:</b> <%= tireBrand %></div>
-<div><b>Front Tire Hardness (Shore):</b> <%= tiresFrntShore  %></div>
-<div><b>Rear Tire Hardness (Shore):</b> <%= tiresRearShore %></div>
-<div><b>Front Differential (Diff.) TYPE:</b> <%= diffFrntType %></div>
-<div><b>Front Diff. Oil Weight/Viscosity (cP/ct):</b> <%= diffFrntOil  %></div>
-<div><b>Rear Differential (Diff.) TYPE:</b> <%= diffRearType %></div>
-<div><b>Rear Diff. Oil Weight/Viscosity (cP/ct):</b> <%= diffRearOil %></div>
-<div><b>Weight Distribution FRONT:</b> <%= wtFrnt %>%</div>
-<div><b>Weight Distribution REAR:</b> <%= wtRear %>%</div>
-<div><b>Weight Distribution LEFT:</b> <%= wtLft %>%</div>
-<div><b>Weight Distribution RIGHT:</b> <%= wtRht %>%</div>
-<div><b>Weight Distribution FRRL:</b> <%= wtFRRL %>%</div>
-<div><b>Weight Distribution FLRR:</b> <%= wtFLRR %>%</div>
-<div><b>Front Ride Height:</b> <%= rideHtFrnt %> mm</div>
-<div><b>Rear Ride Height:</b> <%= rideHtRear %> mm</div>
-<div><b>Front Shockbody on Shock Tower Position:</b> <%= susFrntTopPos %> hole</div>
-<div><b>Front Piston Arm on Swing Arm Position:</b> <%= susFrntBtnPos %> hole</div>
-<div><b>Rear Shockbody on Shock Tower Position:</b> <%= susRearTopPos  %> hole </div>
-<div><b>Rear Piston Arm on Swing Arm Position:</b> <%= susRearBtnPos %> hole</div>
-<div><b>Front Shockbody Piston Setting:</b> <%=  susFrntPistHoles %> holes</div>
-<div><b>Rear Shockbody Piston Setting:</b> <%= susRearPistHoles %> holes</div>
-<div><b>Front Suspension Spring Stiffness:</b> <%= susFrntSpring %></div>
-<div><b>Rear Suspension Spring Stiffness:</b> <%= susRearSpring %></div>
-<div><b>Front Suspension Oil Weight(viscosity)(cP/ct):</b> <%= susFrntOil %></div>
-<div><b>Rear Suspension Oil Weight(viscosity)(cP/ct) :</b> <%= susRearOil %></div>
-<div><b>Front Suspension Rebound Setting:</b> <%=  susFrntRebound %></div>
-<div><b>Rear Suspension Rebound Setting:</b> <%= susRearRebound %></div>
-<div><b>Front Wheel Camber:</b> <%= camberFrnt %> deg</div>
-<div><b>Rear Wheel Camber:</b> <%= camberRear %> deg</div>
-<div><b>Front Wheel Hub Caster:</b> <%= casterFrnt %> deg</div>
-<div><b>Front Toe (Toe-Out) :</b> <%= toeFrnt %> deg</div>
-<div><b>Rear Toe (Toe-In)  :</b> <%= toeRear %> deg</div>
-<div><b>Front Anti-Roll Bar Thickness:</b> <%= antiRollFrnt %> deg</div>
-<div><b>Rear Anti-Roll Bar Thickness:</b> <%= antiRollRear %> deg</div>
+<div>
+   <b><u>ANTI-ROLL BAR</b> (ARS, Stabiliser):</u>
+  <div>
+    <b>Front Anti-Roll Bar Thickness:</b> <%= antiRollFrnt %> deg
+  </div>
+  <div>
+    <b>Rear Anti-Roll Bar Thickness:</b> <%= antiRollRear %> deg
+  </div>
+</div>
 
 <%-include('z_footerGlobal')-%>

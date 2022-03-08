@@ -1,12 +1,11 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  email TEXT,
+  hashed_password varchar
 );
 
-CREATE TABLE categories (
-  id SERIAL PRIMARY KEY,
-  name TEXT
-);
+--user id 4 = Red Fire Truck
 
 CREATE TABLE types (
   id SERIAL PRIMARY KEY,
@@ -28,9 +27,6 @@ CREATE TABLE bodyshells (
 CREATE TABLE platforms (
   id SERIAL PRIMARY KEY,
   category_id INTEGER,
-  CONSTRAINT fk_category
-      FOREIGN KEY(category_id)
-      REFERENCES categories(id),
   platform_type_id INTEGER, 
   CONSTRAINT fk_type
       FOREIGN KEY (platform_type_id)
@@ -49,53 +45,9 @@ CREATE TABLE tracks (
   location TEXT
 );
 
-CREATE TABLE events (
-  id SERIAL PRIMARY KEY, 
-  name TEXT,
-  date DATE,   
-  event_type_id INTEGER,
-  CONSTRAINT fk_type
-      FOREIGN KEY(event_type_id)
-      REFERENCES types(id),
-  event_user_id INTEGER,
-  CONSTRAINT fk_user
-      FOREIGN KEY(event_user_id)
-      REFERENCES users(id),
-  event_track_id INTEGER, 
-  CONSTRAINT fk_track
-      FOREIGN KEY(event_track_id)
-      REFERENCES tracks(id)
-);
-
-CREATE TABLE tracktimes (
-  id SERIAL PRIMARY KEY,
-  event_id INTEGER, 
-  CONSTRAINT fk_event
-      FOREIGN KEY(event_id)
-      REFERENCES events(id),
-  track_id INTEGER, 
-  CONSTRAINT fk_track 
-      FOREIGN KEY(track_id)
-      REFERENCES tracks(id),
-  tracktime_user_id INTEGER,
-  CONSTRAINT fk_user 
-      FOREIGN KEY(tracktime_user_id)
-      REFERENCES users(id),
-  direction TEXT, 
-  lapcount INTEGER,
-  total_time TEXT,
-tracktime_type_id INTEGER, 
-  CONSTRAINT fk_type    
-      FOREIGN KEY(tracktime_type_id)
-      REFERENCES types(id),
-tracktime_platform_id INTEGER, 
-  CONSTRAINT fk_platform
-      FOREIGN KEY(tracktime_platform_id)
-      REFERENCES platforms(id)
-);
-
 CREATE TABLE setups (
 id SERIAL PRIMARY KEY, 
+name TEXT,
 userid INTEGER,
 CONSTRAINT fk_user
     FOREIGN KEY(userid)
@@ -104,17 +56,6 @@ platform_id INTEGER,
 CONSTRAINT fk_platform
     FOREIGN KEY(platform_id)
     REFERENCES platforms(id),
-setup_tracktimes_id INTEGER,
-CONSTRAINT fk_track 
-    FOREIGN KEY(setup_tracktimes_id)
-    REFERENCES tracks(id),
-setup_event_id INTEGER,
-    FOREIGN KEY(setup_event_id)
-    REFERENCES events(id),
-bodyshell_id INTEGER,
-  CONSTRAINT fk_bodyshell
-    FOREIGN KEY(bodyshell_id)
-    REFERENCES bodyshells(id), 
 motor_size TEXT,
 motor_turn TEXT,
 esc_size TEXT,
@@ -156,19 +97,37 @@ anti_roll_frnt_wire_thickness NUMERIC,
 anti_roll_rear_wire_thickness NUMERIC
 );
 
-
---JOIN TABLE TRACK and SETUP
-CREATE TABLE setups_tracktimes (
+CREATE TABLE tracktimes (
   id SERIAL PRIMARY KEY,
-  setup_id INTEGER,
+  date DATE,
+  event_name text, 
+  track_id INTEGER, 
+  CONSTRAINT fk_track 
+      FOREIGN KEY(track_id)
+      REFERENCES tracks(id),
+  direction TEXT, 
+  tracktime_user_id INTEGER,
+  CONSTRAINT fk_user 
+      FOREIGN KEY(tracktime_user_id)
+      REFERENCES users(id),
+  lapcount INTEGER,
+  total_time TEXT,
+tracktime_type_id INTEGER, 
+  CONSTRAINT fk_type    
+      FOREIGN KEY(tracktime_type_id)
+      REFERENCES types(id),
+tracktime_platform_id INTEGER, 
+  CONSTRAINT fk_platform
+      FOREIGN KEY(tracktime_platform_id)
+      REFERENCES platforms(id),
+tracktime_setup_id INTEGER, 
   CONSTRAINT fk_setup
-      FOREIGN KEY(setup_id)
+      FOREIGN KEY(tracktime_setup_id)
       REFERENCES setups(id),
-  tracktime_id INTEGER,
-  CONSTRAINT fk_tracktime
-      FOREIGN KEY(tracktime_id)
-      REFERENCES tracktimes(id)
+tracktime_bodyshell_id INTEGER, 
+  CONSTRAINT fk_bodyshell
+      FOREIGN KEY(tracktime_bodyshell_id)
+      REFERENCES bodyshells(id)
 );
-
 
 

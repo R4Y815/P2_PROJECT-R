@@ -1,0 +1,407 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3><b>Editing Setup <%= id %> ... </b> </h3>
+<div>
+<p></p>  
+<form action="/setup/<%= id %>?_method=PUT" method="POST">
+<div>
+  <label for="setupName" class="mb-3" ><b>Setup Name:</b></label>  
+  <input type="text" name="setupName" id="setupName" value="<%= setup.name %>">
+</div>  
+<p></p>  
+
+  
+<!-- Select from the users table --> 
+<div>
+  <label for="userId" class="mb-3"><b>Setup Mechanic:</b></label>  
+  <select name="userId">
+    <% users.forEach((user) => { %>
+      <option value="<%= user.id %>" <% if(user.id === setup.userid) {%> checked="checked" <%}%> /><%= user.name %></option>  
+      <% }); %>
+  </select><small>[previous: <%= setup.user_name  %>]</small>
+</div>  
+<p></p>
+
+
+
+<!-- Select from the platforms table -->
+<div>
+  <label for="platformId" class="mb-3"><b>Platform:</b></label>  
+  <select name="platformId">
+    <% platforms.forEach((platform) => { %>
+      <option value="<%= platform.id %>">
+        <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+      <% }); %>
+  </select><small>[previous: <%= setup.platform_name  %>(<%= setup.model  %>)]</small>
+</div>  
+<p></p>
+
+<!-- Motor Details -->
+<div>
+  <b><u>Motor:</u></b> <small></small>
+  <div>
+    <b>Size:</b>
+    <span>
+      <label for="380"> 380</label>
+      <input type="radio" name="motor_size" id="380" value="380" <% if(setup.motor_size === '380'){ %> checked="checked" <%}%> /> 
+    </span>
+    <span>
+      <label for="540">| 540</label>
+      <input type="radio" name="motor_size" id="540" value="540" <% if(setup.motor_size === '540'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+      <label for="600">| 600</label>
+      <input type="radio" name="motor_size" id="600" value="600" <% if(setup.motor_size === '600'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+  <p></p>
+  <div>
+    <b>No. of Turns</b>
+    <div>
+      <span>
+        <label for="4.5T">|  4.5T</label>
+        <input type="radio" name="motor_turn" id="4.5T" value="4.5T" <% if(setup.motor_turn === '4.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="5.5T">| 5.5T</label>
+        <input type="radio" name="motor_turn" id="5.5T" value="5.5T" <% if(setup.motor_turn === '5.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="7.5T">| 7.5T</label>
+        <input type="radio" name="motor_turn" id="7.5T" value="7.5T"  <% if(setup.motor_turn === '7.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+    </div>
+    <div>
+      <span>
+        <label for="10.5T">| 10.5T</label>
+        <input type="radio" name="motor_turn" id="10.5T" value="10.5T" <% if(setup.motor_turn === '10.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="13.5T">| 13.5T</label>
+        <input type="radio" name="motor_turn" id="13.5T" value="13.5T" <% if(setup.motor_turn === '13.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="15.5T">| 15.5T</label>
+        <input type="radio" name="motor_turn" id="15.5T" value="15.5T" <% if(setup.motor_turn === '15.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+    </div>
+    <div>
+      <span>
+        <label for="17.5T">| 17.5T</label>
+        <input type="radio" name="motor_turn" id="17.5T" value="17.5T" <% if(setup.motor_turn === '17.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="21.5T">| 21.5T</label>
+        <input type="radio" name="motor_turn" id="21.5T" value="21.5T" <% if(setup.motor_turn === '21.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+      <span>
+        <label for="25.5T">| 25.5T</label>
+        <input type="radio" name="motor_turn" id="25.5T" value="25.5T" <% if(setup.motor_turn === '25.5T'){ %> checked="checked"<%}%> /> 
+      </span>
+     </div> 
+  </div>
+</div>
+<p></p>
+<div><b><u>Electronic Speed Controller (ESC)</u></b>
+<div>
+  <b>Max Continuous Current Rating</b>
+  <span>
+    <label for="60A">: 60A</label>
+    <input type="radio" name="esc_size" id="60A" value="60A" <% if(setup.esc_size === '60A'){ %> checked="checked"<%}%> /> 
+  </span>
+  <span>
+    <label for="80A">| 80A</label>
+    <input type="radio" name="esc_size" id="80A" value="80A" <% if(setup.esc_size === '80A'){ %> checked="checked"<%}%> /> 
+  </span>
+  <span>
+    <label for="120A">| 120A</label>
+    <input type="radio" name="esc_size" id="120A" value="120A" <% if(setup.esc_size === '120A'){ %> checked="checked"<%}%> /> 
+  </span>
+  <span>
+    <label for="300A">| 300A</label>
+    <input type="radio" name="esc_size" id="300A" value="300A" <% if(setup.esc_size === '300A'){ %> checked="checked"<%}%> /> 
+  </span>
+</div>
+<p></p>
+<div>
+  <b>ESC Setting Constraints:</b>
+  <span>
+    <label for="BLINKY">: BLINKY(Stock Timing)</label>
+    <input type="radio" name="esc_setting" id="BLINKY" value="BLINKY" <% if(setup.esc_setting === 'BLINKY'){ %> checked="checked"<%}%> /> 
+  </span>
+  <span>
+    <label for="MODIFIED">| MODIFIED</label>
+    <input type="radio" name="esc_setting" id="MODIFIED" value="MODIFIED" <% if(setup.esc_setting === 'MODIFIED'){ %> checked="checked"<%}%> /> 
+  </span>
+</div>
+
+
+</div>
+
+<p></p>
+<div>
+<label for="fdr"><b><u>FINAL DRIVE RATIO:</u></b></label>  
+  <input type="number" name="fdr" id="fdr" min="2.0" step="0.01" max="12.0" value="<%= setup.fdr %>">
+</div>
+<p></p>
+<div>
+  <b><u>TIRES</u></b>
+  <div>
+  <label for="tires_brand">Brand:</label>  
+    <input type="text" name="tires_brand" id="tires_brand" value="<%= setup.tires_brand %>">
+  </div>
+  <div>
+  <label for="tires_frnt_shore">Front Tire Shore (hardness):</label>  
+    <input type="text" name="tires_frnt_shore" id="tires_frnt_shore" value="<%= setup.tires_frnt_shore %>">
+  </div>
+  <div>
+  <label for="tires_rear_shore">Rear Tire Shore (hardness)):</label>  
+    <input type="text" name="tires_rear_shore" id="tires_rear_shore" value ="<%= setup.tires_rear_shore %>">
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>Front Differential Type</u></b>
+  <div>
+    <label for="SPOOL">SPOOL</label>
+    <input type="radio" name="diff_frnt_type" id="SPOOL" value="SPOOL"  <% if(setup.diff_frnt_type === 'SPOOL'){ %> checked="checked"<%}%> /> 
+  </div>
+  <div>
+    <label for="GEAR DIFF">GEAR DIFF</label>
+    <input type="radio" name="diff_frnt_type" id="GEAR DIFF" value="GEAR DIFF"  <% if(setup.diff_frnt_type === 'GEAR DIFF'){ %> checked="checked"<%}%> /> 
+  </div>
+  <div>
+    <label for="BALL DIFF">BALL DIFF</label>
+    <input type="radio" name="diff_frnt_type" id="BALL DIFF" value="BALL DIFF" <% if(setup.diff_frnt_type === 'BALL DIFF'){ %> checked="checked"<%}%> /> 
+  </div>
+</div>
+<p></p>
+<div>
+<label for="diff_frnt_oil_wght"><b><u>Front Diff Oil Weight (cP/ct):</u></b></label>  
+  <input type="number" name="diff_frnt_oil_wght" id="diff_frnt_oil_wght" min="0" step="500" max="30000" value="<%= setup.diff_frnt_oil_wght %>">
+</div>
+<p></p>
+<div>
+  <b><u>Rear Diffential Type</u></b>
+  <div>
+    <label for="GEAR DIFF">GEAR DIFF</label>
+    <input type="radio" name="diff_rear_type" id="GEAR DIFF" value="GEAR DIFF" <% if(setup.diff_rear_type === 'GEAR DIFF'){ %> checked="checked"<%}%> /> 
+  </div>
+  <div>
+    <label for="BALL DIFF">BALL DIFF</label>
+    <input type="radio" name="diff_rear_type" id="BALL DIFF" value="BALL DIFF" <% if(setup.diff_rear_type === 'BALL DIFF'){ %> checked="checked"<%}%> /> 
+  </div>
+</div>
+<p></p>
+<div>
+<label for="diff_rear_oil_wght"><b><u>Rear Diff Oil Weight (cP/ct):</u></b></label>  
+  <input type="number" name="diff_rear_oil_wght" id="diff_rear_oil_wght" min="0" step="500" max="30000" value="<%= setup.diff_rear_oil_wght %>">
+</div>
+<p></p>
+<div>
+<b><u>WEIGHT DISTRIBUTION</u></b>
+<div>
+<label for="wt_distro_front"><b>FRONT(%):</b></label>  
+  <input type="number" name="wt_distro_front" id="wt_distro_front" min="20" step="1" max="80" value="<%= setup.wt_distro_front %>">
+</div>
+<div>
+<label for="wt_distro_rear"><b>REAR(%):</b></label>  
+  <input type="number" name="wt_distro_rear" id="wt_distro_rear" min="20" step="1" max="80" value="<%= setup.wt_distro_rear %>">
+</div>
+<div>
+<label for="wt_distro_lft"><b>LEFT(%):</b></label>  
+  <input type="number" name="wt_distro_lft" id="wt_distro_lft" min="20" step="1" max="80" value="<%= setup.wt_distro_lft %>">
+</div>
+<div>
+<label for="wt_distro_rht"><b>RIGHT(%):</b></label>  
+  <input type="number" name="wt_distro_rht" id="wt_distro_rht" min="20" step="1" max="80" value="<%= setup.wt_distro_rht %>">
+</div>
+<div>
+<label for="wt_distro_fr_rl"><b>FR/RL(%):</b></label>  
+  <input type="number" name="wt_distro_fr_rl" id="wt_distro_fr_rl" min="20" step="1" max="80" value="<%= setup.wt_distro_fr_rl %>">
+</div>
+<div>
+<label for="wt_distro_fl_rr"><b>FL/RR(%):</b></label>  
+  <input type="number" name="wt_distro_fl_rr" id="wt_distro_fl_rr" min="20" step="1" max="80" value="<%= setup.wt_distro_fl_rr  %>">
+</div>
+</div>
+<p></p>
+<div>
+<b><u>RIDE HEIGHT</u></b>
+<div>
+<label for="ride_ht_front"><b>front ride ht. (mm):</b></label>  
+  <input type="number" name="ride_ht_front" id="ride_ht_front" min="2" step="0.1" max="40" value="<%= setup.ride_ht_front %>">
+</div>
+<div>
+<label for="ride_ht_rear"><b>rear ride ht. (mm):</b></label>  
+  <input type="number" name="ride_ht_rear" id="ride_ht_rear" min="2" step="0.1" max="40" value="<%= setup.ride_ht_rear %>">
+</div>
+</div>
+
+<p></p>
+<div>
+  <b><u>SUSPENSION:</u> FRONT</b>
+  <div>
+    Front Shockbody on Shock Tower Position
+    <span>
+     <label for="inner">: inner</label>
+     <input type="radio" name="susFrntTopPos" id="inner" value="inner" <% if(setup.susp_frnt_top_pos === 'inner'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="middle">| middle</label>
+     <input type="radio" name="susFrntTopPos" id="middle" value="middle"  <% if(setup.susp_frnt_top_pos === 'middle'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="outer">| outer</label>
+     <input type="radio" name="susFrntTopPos" id="outer" value="outer" <% if(setup.susp_frnt_top_pos === 'outer'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+  <div>
+    Front Piston Arm on Swing Arm Position
+    <span>
+     <label for="inner">: inner</label>
+     <input type="radio" name="susFrntBtnPos" id="inner" value="inner"  <% if(setup.susp_frnt_btn_pos === 'inner'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="outer">| outer</label>
+     <input type="radio" name="susFrntBtnPos" id="outer" value="outer"  <% if(setup.susp_frnt_btn_pos === 'outer'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+  <div>
+    <label for="susFrntPistHoles">Front Shockbody Piston Setting: </label>  
+    <input type="number" name="susFrntPistHoles" id="susFrntPistHoles" min="2" step="1" max="5" value="<%= setup.susp_frnt_pist_holes %>"> holes
+  </div>
+  <div>
+    <label for="susFrntSpring">Front Suspension Spring Stiffness (colour, nmbrCode or description): </label>  
+    <input type="text" name="susFrntSpring" id="susFrntSpring" value="<%= setup.susp_frnt_spring_hardness %>">
+  </div>
+  <div>
+    <label for="susFrntOil">Front Suspension Oil Weight(viscosity)(cP/ct):</label>  
+    <input type="number" name="susFrntOil" id="susFrntOil" min="100" step="50" max="800" value="<%= setup.susp_frnt_oil_wt %>">
+  </div>
+  <div>
+    Front Shock Rebound Setting
+    <span>
+     <label for="zero">: zero</label>
+     <input type="radio" name="susFrntRebound" id="zero" value="zero"  <% if(setup.susp_frnt_rebound === 'zero'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="half">| half</label>
+     <input type="radio" name="susFrntRebound" id="half" value="half"  <% if(setup.susp_frnt_rebound === 'half'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="full">| full</label>
+     <input type="radio" name="susFrntRebound" id="full" value="full" <% if(setup.susp_frnt_rebound === 'full'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>SUSPENSION:</u> REAR</b>
+  <div>
+    Rear Suspension Head on Shock Tower Position
+    <span>
+     <label for="inner">: inner</label>
+     <input type="radio" name="susRearTopPos" id="inner" value="inner" <% if(setup.susp_rear_top_pos === 'inner'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="middle">| middle</label>
+     <input type="radio" name="susRearTopPos" id="middle" value="middle" <% if(setup.susp_rear_top_pos === 'middle'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="outer">| outer</label>
+     <input type="radio" name="susRearTopPos" id="outer" value="outer" <% if(setup.susp_rear_top_pos === 'outer'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+  <div>
+    Rear Piston Arm on Swing Arm Position
+    <span>
+     <label for="inner">: inner</label>
+     <input type="radio" name="susRearBtnPos" id="inner" value="inner" <% if(setup.susp_rear_btn_pos === 'inner'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="outer">| outer</label>
+     <input type="radio" name="susRearBtnPos" id="outer" value="outer" <% if(setup.susp_rear_btn_pos === 'outer'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+  <div>
+    <label for="susRearPistHoles">Rear Shockbody Piston Setting: </label>  
+    <input type="number" name="susRearPistHoles" id="susRearPistHoles" min="2" step="1" max="5" value="<%= setup.susp_rear_pist_holes %>"> holes
+  </div>
+  <div>
+    <label for="susRearSpring">Rear Suspension Spring Stiffness (colour, nmbrCode or description): </label>  
+    <input type="text" name="susRearSpring" id="susRearSpring" value="<%= setup.susp_rear_spring_hardness %>">
+  </div>
+  <div>
+    <label for="susRearOil">Rear Suspension Oil Weight(viscosity)(cP/ct):</label>  
+    <input type="number" name="susRearOil" id="susRearOil" min="100" step="50" max="800" value="<%= setup.susp_rear_oil_wt %>">
+  </div>
+  <div>
+    Rear Shock Rebound Setting
+    <span>
+     <label for="zero">: zero</label>
+     <input type="radio" name="susRearRebound" id="zero" value="zero" <% if(setup.susp_rear_rebound === 'zero'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="half">| half</label>
+     <input type="radio" name="susRearRebound" id="half" value="half" <% if(setup.susp_rear_rebound === 'half'){ %> checked="checked"<%}%> /> 
+    </span>
+    <span>
+     <label for="full">| full</label>
+     <input type="radio" name="susRearRebound" id="full" value="full"  <% if(setup.susp_rear_rebound === 'full'){ %> checked="checked"<%}%> /> 
+    </span>
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CASTER SETTINGS</u></b>
+  <div>
+    <label for="casterFrnt">Front Caster:</label>  
+    <input type="number" name="casterFrnt" id="casterFrnt" min="-3" step="0.5" max="4" value="<%= setup.caster_frnt %>"> deg.
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>CAMBER SETTINGS</u></b>
+  <div>
+    <label for="camberFrnt">Front Wheel Camber:</label>  
+    <input type="number" name="camberFrnt" id="camberFrnt" min="-3" step="0.5" max="8" value="<%= setup.camber_frnt %>"> deg.
+  </div>
+  <div>
+    <label for="camberRear">Rear Wheel Camber:</label>  
+    <input type="number" name="camberRear" id="camberRear" min="-3" step="0.5" max="8" value="<%= setup.camber_rear %>"> deg.
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>TOE SETTINGS</u></b>
+  <div>
+    <label for="toeFrnt">Front Toe (TOE-OUT):</label>  
+    <input type="number" name="toeFrnt" id="toeFrnt" min="-4" step="0.5" max="6" value="<%= setup.toe_out_frnt %>"> deg.
+  </div>
+  <div>
+    <label for="toeRear">Rear Toe (TOE-OUT):</label>  
+    <input type="number" name="toeRear" id="toeRear" min="-4" step="0.5" max="6" value="<%= setup.toe_in_rear %>"> deg.
+  </div>
+</div>
+<p></p>
+<div>
+  <b><u>ANTI-ROLL BAR</b> (ARS, Stabiliser)</u>
+  <div>
+    <label for="antiRollFrnt">Front Anti-Roll Bar Wire Thickness:</label>  
+    <input type="number" name="antiRollFrnt" id="antiRollFrnt" min="0" step="0.01" max="3.0" value="<%= setup.anti_roll_frnt_wire_thickness %>">mm <br>('0' for 'uninstalled' )
+  </div>
+  <div>
+    <label for="antiRollRear">Rear Anti-Roll Bar Wire Thickness:</label>  
+    <input type="number" name="antiRollRear" id="antiRollRear" min="0" step="0.01" max="3.0" value="<%= setup.anti_roll_rear_wire_thickness %>">mm <br>('0' for 'uninstalled' )
+  </div>
+</div>
+<div class="col-auto"><input type="submit" value="Submit"></div>
+</form>
+</div>
+<p></p>
+
+
+<%-include('z_footerGlobal')-%>

@@ -33,8 +33,8 @@
             Link
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" href="#">Track times</a></li>
-            <li><a class="dropdown-item" href="#">Events/Races</a></li>
+            <li><a class="dropdown-item" href="#"> All Track times </a></li>
+            <li><a class="dropdown-item" href="#"> All Events/Races</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
@@ -42,11 +42,16 @@
 <!--         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Link</a>
         </li> -->
+
       </ul>
-      <form class="d-flex">
+       
+      <form action ="/logout?_method=DELETE" method="POST" class="d-flex">
+      <button type="submit" class="btn btn-outline-sucess">LogOut</button>
+      </form>
+<!--       <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form> -->
     </div>
   </div>
 </nav>

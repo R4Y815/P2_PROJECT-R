@@ -1,0 +1,46 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3>
+  <b>List of all Setups </b>
+</h3>
+  <% setups.forEach((setup) => { %>
+<div>
+  <span>
+  <a href="/setup/<%= setup.id %>"><b><%= setup.id %>)-<i>"<%= setup.name %>"</i></b></a>
+  </span>
+</div>
+<div>
+  <span>
+   |____<b><%= setup.brand %> <%= setup.platform_name %></b>
+  </span>
+  <span>
+  |  <b><%= setup.motor_turn %></b>
+  </span>
+  <span>
+  |  <b>FDR = <%= setup.fdr %></b>
+  </span>
+  <span>
+  |---by: <b><%= setup.user_name %></span></b>
+  </span>
+</div>
+<p></p>
+  <div>
+    <form action="/setup/<%= setup.id %>?_method=DELETE" method="POST">  
+    <button type="submit" class="btn-sm">DEL: "<%= setup.name %>"" </button>
+    </form>  
+  </div>
+<p></p>
+<hr/>        
+  <% }); %>
+
+
+
+
+
+
+
+
+
+<%-include('z_footerGlobal')-%>

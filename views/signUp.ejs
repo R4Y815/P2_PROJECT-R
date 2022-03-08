@@ -1,0 +1,47 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+
+
+<div>
+  <h2>Creating Your New User Account</h2>
+</div>
+<p></p>
+<form action="/signup" method="POST">
+<div>
+  <label for="name" class="mb-3"><b>Name:</b></label>  
+  <input type="text" name="name" id="name" class="dateTime" required>
+</div>
+<div>
+  <label for="email" class="mb-3"><b>Email :</b></label>  
+  <input type="text" name="email" id="email" class="dateTime" value="your-email-@example.com" required>
+</div>
+<div>
+  <label for="password" class="mb-3"><b>password(longer than 8 characters):</b></label>  
+  <input type="password" name="password" id="password" required>
+</div>
+<div class="col-auto"><input type="submit" value="Submit"></div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-include('z_footerGlobal')-%>

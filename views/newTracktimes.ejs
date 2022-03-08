@@ -1,0 +1,117 @@
+<%-include('y_headerGlobal');-%>
+<h1 class="topSpacer"><p></p>.</h1>
+<h4 class="topSpacer"><p></p>.</h4>
+
+<h3><b>Record New Tracktime:</b> </h3>
+<div>
+<p></p>
+
+<form action="/tracktime" method="POST">
+<div>
+  <label for="date"><b><u>Date:</u></b></label>  
+  <input type="date" name="date" id="date" value="1999-12-31">
+</div>
+<p></p>
+<div>
+  <label for="event_name"><b><u>Event:</u></b></label>  
+  <input type="text" name="event_name" id="event_name"  value="(i.e. competition, fun drive, event name)">
+</div>
+<p></p>
+<!-- Drop down selection for names of tracks -->
+<div>
+  <label for="trackId" class="mb-3"><b>Track Name:</b></label>  
+  <select name="trackId">
+    <% tracks.forEach((track) => { %>
+      <option value="<%= track.id %>"><%= track.name %></option>  
+      <% }); %>
+  </select>
+</div>
+
+<!-- Drop down selection for user.id TO BE REPLACE BY COOKIE LOG IN -->
+<div>
+  <label for="userId" class="mb-3"><b>Driver:</b></label>  
+  <select name="userId">
+    <% users.forEach((user) => { %>
+      <option value="<%= user.id %>"><%= user.name %></option>  
+      <% }); %>
+  </select>
+</div>  
+
+
+<!-- LAP DIRECTION -->
+<div>
+  <span><b><u>Lap Direction</u></b></span>
+  <span>
+    <label for="CW">: CLOCKWISE</label>
+    <input type="radio" name="direction" id="CW" value="CW" checked> 
+  </span>
+  <span>
+    <label for="CCW">| COUNTER CLOCKWISE</label>
+    <input type="radio" name="direction" id="CCW" value="CCW">
+  </span>
+</div>  
+<p></p>
+
+<!-- LAP COUNT -->
+<div>
+  <label for="lapcount"><b><u>Number of Laps:</u></b></label>  
+  <input type="number" name="lapcount" id="lapcount" min="1" step="1" max="50" value="8">
+</div>
+<p></p>
+
+<!-- TOTAL TIME -->
+<!-- Total time taken input needs to be changed into integer or long input... taken in as mins, secs, milliseconds separately then recombined to ms on the backend.  -->
+<div>
+  <label for="total_time"><b><u>Total Time:</u></b></label>  
+  <input type="text" name="total_time" id="total_time" value="not recorded yet">
+</div>
+<p></p>
+
+
+<!-- Drop down selection for names of TYPE NAME DESCRIPTION NON-DATABASE -->
+<div>
+  <label for="typeId" class="mb-3"><b>TYPE:</b></label>  
+  <select name="typeId">
+    <% types.forEach((type) => { %>
+      <option value="<%= type.id %>"><%= type.name %></option>  
+      <% }); %>
+  </select>
+</div>  
+<p></p>
+
+<!-- Drop down selection for platform name -->
+<div>
+  <label for="platformId" class="mb-3"><b>CHASSIS:</b></label>  
+  <select name="platformId">
+    <% platforms.forEach((platform) => { %>
+      <option value="<%= platform.id %>"><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+      <% }); %>
+  </select>
+</div>  
+<p></p>
+
+
+<!-- Drop down selection for SETUP ID -->
+<div>
+  <label for="setupId" class="mb-3"><b>SETUP :</b></label>  
+  <select name="setupId">
+    <% setups.forEach((setup) => { %>
+      <option value="<%= setup.id %>">#<%= setup.id %>- <%= setup.name %></option>  
+      <% }); %>
+  </select>
+</div>  
+<p></p>
+<div>
+  <label for="bodyshell_id" class="mb-3"><b>BODYSHELL:</b></label>  
+  <select name="bodyshell_id">
+    <% bodyshells.forEach((bodyshell) => { %>
+      <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
+      <% }); %>
+  </select>
+</div> 
+
+<div class="col-auto"><input type="submit" value="Submit"></div>
+
+</form>
+
+<%-include('z_footerGlobal')-%>
