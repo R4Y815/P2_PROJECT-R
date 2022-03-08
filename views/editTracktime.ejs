@@ -9,7 +9,7 @@
 <form action="/tracktime/<%= id %>?_method=PUT" method="POST">
 <div>
   <label for="date"><b><u>Date:</u></b></label>  
-  <input type="date" name="date" id="date"> <small>[previous: <%= tracktime.date %>]</small>
+  <input type="date" name="date" id="date"> <small>[previous: <%= dateStringDisp %>]</small>
 </div>
 <p></p>
 <div>
@@ -22,9 +22,13 @@
   <label for="trackId" class="mb-3"><b>Track Name:</b></label>  
   <select name="trackId">
     <% tracks.forEach((track) => { %>
-      <option value="<%= track.id %>"><%= track.name %></option>  
-      <% }); %>
-  </select><small>[previous: <%= tracktime.track_name %>]</small>
+      <% if (track.id === tracktime.track_id) { %> 
+        <option value=" <%= track.id %>" selected><%= track.name %></option> 
+      <% } else { %>
+        <option value=" <%= track.id %>"><%= track.name %></option> 
+      <% } %>
+    <% }); %>
+  </select>
 </div>
 
 <!-- Drop down selection for user.id TO BE REPLACE BY COOKIE LOG IN -->
@@ -32,9 +36,13 @@
   <label for="userId" class="mb-3"><b>Driver:</b></label>  
   <select name="userId">
     <% users.forEach((user) => { %>
-      <option value="<%= user.id %>"><%= user.name %></option>  
-      <% }); %>
-  </select><small>[previous: <%= tracktime.user_name %>]</small>
+      <% if (user.id === tracktime.tracktime_user_id) { %>
+        <option value="<%= user.id %>" selected><%= user.name %></option>  
+      <% } else { %>
+        <option value="<%= user.id %>"><%= user.name %></option>  
+      <% } %>
+    <% }); %>
+  </select>
 </div>  
 
 
@@ -73,9 +81,13 @@
   <label for="typeId" class="mb-3"><b>TYPE:</b></label>  
   <select name="typeId">
     <% types.forEach((type) => { %>
-      <option value="<%= type.id %>"><%= type.name %></option>  
-      <% }); %>
-  </select><small>[previous: <%= tracktime.type_name %>]</small>
+      <% if (type.id === tracktime.tracktime_type_id) { %> 
+        <option value="<%= type.id %>" selected><%= type.name %></option>  
+      <% } else { %> 
+        <option value="<%= type.id %>"><%= type.name %></option>
+      <% } %>
+    <% }); %>
+  </select>
 </div>  
 <p></p>
 
@@ -84,9 +96,13 @@
   <label for="platformId" class="mb-3"><b>CHASSIS:</b></label>  
   <select name="platformId">
     <% platforms.forEach((platform) => { %>
+      <% if (platform.id === tracktime.tracktime_platform_id) {%>
+      <option value="<%= platform.id %>" selected><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>
+      <% } else { %>
       <option value="<%= platform.id %>"><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
-      <% }); %>
-  </select><small>[previous: <%= tracktime.platform_brand %> <%= tracktime.platform_name %>(<%= tracktime.platform_model %>) ]</small>
+      <% } %>
+    <% }); %>
+  </select>
 </div>  
 <p></p>
 
@@ -96,18 +112,26 @@
   <label for="setupId" class="mb-3"><b>SETUP :</b></label>  
   <select name="setupId">
     <% setups.forEach((setup) => { %>
-      <option value="<%= setup.id %>">#<%= setup.id %>- <%= setup.name %></option>  
-      <% }); %>
-  </select><small>{previous: [<%= tracktime.setup_id %>-<%= tracktime.setup_name %>]}</small>
+      <% if (setup.id === tracktime.tracktime_setup_id ) { %>
+        <option value="<%= setup.id %>" selected>#<%= setup.id %>- <%= setup.name %></option> 
+      <% } else { %>
+        <option value="<%= setup.id %>">#<%= setup.id %>- <%= setup.name %></option>
+      <% } %>
+    <% }); %>
+  </select>
 </div>  
 <p></p>
 <div>
   <label for="bodyshell_id" class="mb-3"><b>BODYSHELL:</b></label>  
   <select name="bodyshell_id">
     <% bodyshells.forEach((bodyshell) => { %>
-      <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
-      <% }); %>
-  </select>[previous: <%= tracktime.bodyshell_brand %> <%= tracktime.bodyshell_name %>(<%= tracktime.bodyshell_variant %>) ]
+      <% if (bodyshell.id === tracktime.tracktime_bodyshell_id) { %>
+        <option value="<%= bodyshell.id %>" selected><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
+      <% } else { %> 
+        <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option> 
+      <% } %>    
+    <% }); %>
+  </select>
 </div> 
 
 <div class="col-auto"><input type="submit" value="Submit"></div>

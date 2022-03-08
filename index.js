@@ -46,8 +46,7 @@ const whenQueryDone = (error, result) => {
   }
 };
 
-/* HELPER FUNCTION: CONVERT TIMES TEXT INPUT from mins:secs: ms INTO ms  */
-
+/* HELPER FUNCTION: CONVERT total_time from mins:secs:TEXT ms INTO ms INTEGER */
 const convertTextToMs = (timeText) => {
   const mins = Number(timeText.split(':')[0]);
   const secs = Number(timeText.split(':')[1].split('.')[0]);
@@ -55,12 +54,65 @@ const convertTextToMs = (timeText) => {
   return mins * 60 * 1000 + secs * 1000 + millisecs;
 };
 
+/* HELPER FUNCTION: CONVERT from ms INTEGER into   mins:secs: ms TEXT */
 const convertMsToText = (timeMs) => {
   const minsStr = (timeMs / 60000).toString().split('.')[0];
   const secsStr = ((timeMs % 60000) / 1000).toString().split('.')[0];
   const msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
   return minsStr + ':' + secsStr + '.' + msStr;
 };
+
+/* CONVERT JS Date Datatype into STRING */
+
+function dateToStr(inputDate, format) {
+  /* parse the input date */
+  const date = new Date(inputDate);
+  /* extract the parts of the date */
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  /* replace the month */
+  format = format.replace("MM", month.toString().padStart(2,0));
+  /* replace the year */
+  if (format.indexOf("YYYY") > -1) {
+    format = format.replace("YYYY", year.toString());
+  } else if (format.indexOf("YY") > -1) {
+    format = format.replace("YY", year.toString().substr(2,2));
+  }
+  /* replace the day */
+  format = format.replace("DD", day.toString().padStart(2,"0"));
+
+  return format;
+}
+
+
+//a simple date formatting function
+/* function dateFormat(inputDate, format) {
+    //parse the input date
+    const date = new Date(inputDate);
+
+    //extract the parts of the date
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();    
+
+    //replace the month
+    format = format.replace("MM", month.toString().padStart(2,"0"));        
+
+    //replace the year
+    if (format.indexOf("yyyy") > -1) {
+        format = format.replace("yyyy", year.toString());
+    } else if (format.indexOf("yy") > -1) {
+        format = format.replace("yy", year.toString().substr(2,2));
+    }
+
+    //replace the day
+    format = format.replace("dd", day.toString().padStart(2,"0"));
+
+    return format;
+} */
+
+
 
 /* FN for Routes */
 /* FN: get Setup Sheet*/
@@ -303,7 +355,7 @@ const showAllTypes = (req, res) => {
   });
 };
 
-const showAllEvents = (req, res) => {
+/* const showAllEvents = (req, res) => {
   const queryAllEvents = 'SELECT * FROM events;';
   pool.query(queryAllEvents, (eventErrors, eventResults) => {
     if (eventErrors) {
@@ -314,7 +366,7 @@ const showAllEvents = (req, res) => {
     const content = { events: eventResults.rows };
     res.render('events', content);
   });
-};
+}; */
 
 const showAllTracks = (req, res) => {
   const queryAllTracks = 'SELECT * FROM tracks;';
@@ -366,6 +418,7 @@ const showAllTrackTimes = (req, res) => {
     const outputs = trackTimesResults.rows;
     outputs.forEach((output) => {
       output.timeStr = convertMsToText(output.total_time);
+      output.dateStr = dateToStr(output.date, 'DD-MM-YYYY');
     });
     const content = { tracktimes: outputs };
     console.log('content =', content);
@@ -407,6 +460,7 @@ const sendNewTracktime = (req, res) => {
 const formSubmitted = req.body;
 const formData = JSON.parse(JSON.stringify(formSubmitted));
 const timeInMs = convertTextToMs(formData.total_time);
+console.log('formData.date =', formData.date);
 const tracktimeInput = [
 formData.date,
 formData.event_name,
@@ -444,10 +498,12 @@ const showTracktimeEdit = (req, res) => {
     pool.query('SELECT * FROM platforms;'),
     pool.query('SELECT * FROM setups;'),
     pool.query('SELECT * FROM bodyshells ORDER BY brand ASC;'),
-    pool.query('SELECT tracktimes.id AS tracktimes_id, tracktimes.date, event_name, tracks.name AS track_name, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, setups.id AS setup_id, setups.name AS setup_name, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
+    pool.query('SELECT tracktimes.id AS tracktimes_id, tracktimes.date, event_name, tracktimes.track_id, tracks.name AS track_name, tracktimes.tracktime_user_id, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, tracktimes.tracktime_type_id, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, tracktimes.tracktime_platform_id, setups.id AS setup_id, setups.name AS setup_name, tracktimes.tracktime_bodyshell_id, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
   ]).then((allResults) => {
     /* console.log('allResults[6].rows[0] =', allResults[6].rows[0]); */
     const timeStr = convertMsToText(allResults[6].rows[0].total_time);
+    const dateStr = dateToStr(allResults[6].rows[0].date, "DD-MM-YYYY");
+
     const content = {
       id: tracktimeId,
       tracks: allResults[0].rows,
@@ -458,8 +514,9 @@ const showTracktimeEdit = (req, res) => {
       bodyshells: allResults[5].rows,
       tracktime: allResults[6].rows[0],
       totalTime: timeStr,
+      dateStringDisp: dateStr,
     };
-    console.log('Date =',content.tracktime.date);
+    console.log('Date =', content.tracktime.date);
     res.render('editTracktime', content);
   });
 };
