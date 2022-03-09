@@ -487,7 +487,7 @@ const showTracktimeEdit = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY name ASC;'),
     pool.query('SELECT * FROM types;'),
     pool.query('SELECT * FROM platforms;'),
-    pool.query('SELECT * FROM setups;'),
+    pool.query('SELECT  platforms.name AS platform_name, platforms.model, setups.id, setups.name FROM setups INNER JOIN platforms ON setups.platform_id = platforms.id;'),
     pool.query('SELECT * FROM bodyshells ORDER BY brand ASC;'),
     pool.query('SELECT tracktimes.id AS tracktimes_id, tracktimes.date, event_name, tracktimes.track_id, tracks.name AS track_name, tracktimes.tracktime_user_id, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, tracktimes.tracktime_type_id, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, tracktimes.tracktime_platform_id, setups.id AS setup_id, setups.name AS setup_name, tracktimes.tracktime_bodyshell_id, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
   ]).then((allResults) => {

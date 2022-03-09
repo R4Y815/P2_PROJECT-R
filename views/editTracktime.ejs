@@ -82,9 +82,9 @@
   <select name="typeId">
     <% types.forEach((type) => { %>
       <% if (type.id === tracktime.tracktime_type_id) { %> 
-        <option value="<%= type.id %>" selected><%= type.name %></option>  
+        <option value="<%= type.id %>" selected>TYPE <%= type.id %>= <%= type.name %></option>  
       <% } else { %> 
-        <option value="<%= type.id %>"><%= type.name %></option>
+        <option value="<%= type.id %>">TYPE <%= type.id %>= <%= type.name %></option>
       <% } %>
     <% }); %>
   </select>
@@ -97,9 +97,9 @@
   <select name="platformId">
     <% platforms.forEach((platform) => { %>
       <% if (platform.id === tracktime.tracktime_platform_id) {%>
-      <option value="<%= platform.id %>" selected><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>
+      <option value="<%= platform.id %>" selected>TYPE <%= platform.platform_type_id %> | <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>
       <% } else { %>
-      <option value="<%= platform.id %>"><%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
+      <option value="<%= platform.id %>">TYPE <%= platform.platform_type_id %> | <%= platform.brand %> | <%= platform.name %> | <%= platform.model %></option>  
       <% } %>
     <% }); %>
   </select>
@@ -113,9 +113,9 @@
   <select name="setupId">
     <% setups.forEach((setup) => { %>
       <% if (setup.id === tracktime.tracktime_setup_id ) { %>
-        <option value="<%= setup.id %>" selected>#<%= setup.id %>- <%= setup.name %></option> 
+        <option value="<%= setup.id %>" selected> <%= setup.platform_name %> SETUP #<%= setup.id %>- "<%= setup.name %>"</option> 
       <% } else { %>
-        <option value="<%= setup.id %>">#<%= setup.id %>- <%= setup.name %></option>
+        <option value="<%= setup.id %>"><%= setup.platform_name %> SETUP #<%= setup.id %>- "<%= setup.name %>"</option>
       <% } %>
     <% }); %>
   </select>
@@ -126,9 +126,9 @@
   <select name="bodyshell_id">
     <% bodyshells.forEach((bodyshell) => { %>
       <% if (bodyshell.id === tracktime.tracktime_bodyshell_id) { %>
-        <option value="<%= bodyshell.id %>" selected><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
+        <option value="<%= bodyshell.id %>" selected> <%= bodyshell.id %>) TYPE <%= tracktime.tracktime_type_id %> | <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option>  
       <% } else { %> 
-        <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option> 
+        <option value="<%= bodyshell.id %>"><%= bodyshell.id %>) TYPE <%= tracktime.tracktime_type_id %> |  <%= bodyshell.brand %> - <%= bodyshell.name %> (<%= bodyshell.variant %>)</option> 
       <% } %>    
     <% }); %>
   </select>

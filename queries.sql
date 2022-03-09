@@ -111,7 +111,7 @@ ORDER BY setups.id ASC;
 
 
 --SETUP DROPDOWN for NEW TRACKTIMES: 
-SELECT  platforms.model, setups.id, setups.name
+SELECT  platforms.name AS platform_name, platforms.model, setups.id, setups.name
 FROM setups
 INNER JOIN platforms ON setups.platform_id = platforms.id;
 
