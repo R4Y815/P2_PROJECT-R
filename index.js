@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import jsSHA from 'jssha';
 import moment from 'moment';
+import 'dotenv/config';
 
 /* POSTGRESQL STACK BELOW */
 
@@ -668,7 +669,6 @@ app.get('/tracktime/:tracktimeId/edit', showTracktimeEdit); /* Page: Edit Tt */
 app.put('/tracktime/:tracktimeId', sendEditedTracktime); /* Send editTt data */
 /* DELETE SPECIFIC TRACKTIME PAGE */
 app.delete('/tracktime/:tracktimeId', deleteTracktime); /* Delete specific Tracktime */ 
-
 
 app.get('/types', showAllTypes); /* Show All Types */
 app.get('/platforms', showAllPlatforms); /* List All Platforms */
