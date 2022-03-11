@@ -44,6 +44,8 @@ if (process.env.DATABASE_URL) {
   };
 }
 
+const path = 'rocky-journey-67503.herokuapp.com';
+
 const pool = new Pool (pgConnectionConfigs);
 
 const app = express();
@@ -208,7 +210,7 @@ const showNewSetupForm = (req, res) => {
     /* console.log(allResults[0].rows); */
     /* console.log(allResults[1].rows); */
     /* HAS TO BE CHANGED TO USER GIVEN BY COOKIES */
-    const content = { users: allResults[0].rows, platforms: allResults[1].rows };
+    const content = { path: path, users: allResults[0].rows, platforms: allResults[1].rows };
     /* console.log(content.users[0].name); */
 
     res.render('newSetupSheet', content);
@@ -273,7 +275,7 @@ const sendNewSetup = (req, res) => {
     }
     const setupId = resultsSetup.rows[0].id;
     /* res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.'); */
-    res.redirect(301, `http://localhost:${PORT}/setup/${setupId}`);
+    res.redirect(301, `http://${path}/setup/${setupId}`);
   });
 };
 
