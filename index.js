@@ -33,12 +33,12 @@ if (process.env.DATABASE_URL) {
   pgConnectionConfigs = {
     connectionString: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorised: false
-    }
+      rejectUnauthorised: false,
+    },
   };
 } else {
   /* this will be the same value as before */
-    pgConnectionConfigs = {
+  pgConnectionConfigs = {
     user: 'raytor27',
     host: 'localhost',
     database: 'project_2_db',
@@ -680,8 +680,7 @@ app.get('/users', showAllUsers); /* Show All Users */
 
 /* USER LOGINS, AUTH, ETC,  */
 app.get('/user-dashboard', showDashBoard);
-/* 
-CREATE NEW USER ACCOUNT */
+/* CREATE NEW USER ACCOUNT */
 app.get('/signUp', showSignUpPage); /* New User Sign Up Page */
 app.post('/signUp', sendSignUpData);
 
