@@ -32,7 +32,7 @@ if (process.env.DATABASE_URL) {
   /* pg will take in the entire value and use it to connect */
   pgConnectionConfigs = {
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorised: true },
+    ssl: { rejectUnauthorised: false },
   };
 } else {
   /* this will be the same value as before */
