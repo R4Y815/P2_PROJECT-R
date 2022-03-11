@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import jsSHA from 'jssha';
 import moment from 'moment';
-import 'dotenv/config';
 
 /* POSTGRESQL STACK BELOW */
 
@@ -33,7 +32,7 @@ if (process.env.DATABASE_URL) {
   /* pg will take in the entire value and use it to connect */
   pgConnectionConfigs = {
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorised: false },
+    ssl: { rejectUnauthorized: false },
   };
 } else {
   /* this will be the same value as before */
