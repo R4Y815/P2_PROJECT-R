@@ -8,19 +8,49 @@ import jsSHA from 'jssha';
 import moment from 'moment';
 
 /* POSTGRESQL STACK BELOW */
+
+/* OLD POSTGRESQL STCK BELOW */
+/* ==================================================== */
 /* Connecting database to server */
-const { Pool } = pg;
-const pgConnectionConfigs = {
+ const { Pool } = pg;
+
+
+/*const pgConnectionConfigs = {
   user: 'raytor27',
   host: 'localhost',
   database: 'project_2_db',
   port: 5432, // Postgres server always runs on this port
-};
+}; */
+/* ==================================================== */
+
+/* NEW CONNECTION STACK SWITCH BELOW: FOR HEROKU */ 
+
+let pgConnectionConfigs;
+
+/* test to see if the env var is set. The we know we are in Heroku */
+if (process.env.DATABASE_URL) {
+  /* pg will take in the entire value and use it to connect */
+  pgConnectionConfigs = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorised: false
+    }
+  };
+} else {
+  /* this will be the same value as before */
+    pgConnectionConfigs = {
+    user: 'raytor27',
+    host: 'localhost',
+    database: 'project_2_db',
+    port: 5432, // Postgres server always runs on this port
+  };
+}
 
 const pool = new Pool (pgConnectionConfigs);
 
 const app = express();
-const port = 3020;
+/* const port = 3020; */
+const PORT = process.env.PORT || 3004;
 
 /* cookie functinality within js */
 app.use(cookieParser());
@@ -245,7 +275,7 @@ const sendNewSetup = (req, res) => {
     }
     const setupId = resultsSetup.rows[0].id;
     /* res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.'); */
-    res.redirect(301, `http://localhost:${port}/setup/${setupId}`);
+    res.redirect(301, `http://localhost:${PORT}/setup/${setupId}`);
   });
 };
 
@@ -284,7 +314,7 @@ const sendEditedSetup = (req, res) => {
       console.log('ERROR @ editSetupQuery submission = ', err);
       return;
     }
-    res.redirect(301, `http://localhost:${port}/setup/${setupId}`);
+    res.redirect(301, `http://localhost:${PORT}/setup/${setupId}`);
   });
 };
 
@@ -310,7 +340,7 @@ const deleteSetup = (req, res) => {
       console.log('ERROR @ delSetupQuery submission =', err);
       return;
     }
-    res.redirect(301, `http://localhost:${port}/setups`)
+    res.redirect(301, `http://localhost:${PORT}/setups`);
   });
 };
 
@@ -475,7 +505,7 @@ pool.query(insertNewTimes, tracktimeInput, (errorTracktime, resultsTracktime) =>
     const tracktimeId = resultsTracktime.rows[0].id;
     console.log('tracktimeId = ', tracktimeId);
     /* res.send('Insert Tracktime data successfully sent out, please check database side.'); */
-    res.redirect(301, `http://localhost:${port}/tracktimes`);
+    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
   });
 };
 
@@ -533,7 +563,7 @@ const sendEditedTracktime = (req, res) => {
       return;
     }
     /* res.send('sending tracktime test- see console for data details'); */
-    res.redirect(301, `http://localhost:${port}/tracktimes`);
+    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
   });
 };
 
@@ -546,7 +576,7 @@ const deleteTracktime = (req, res) => {
       console.log('ERROR @ delTrackTimeQuery submission =', err);
       return;
     }
-    res.redirect(301, `http://localhost:${port}/tracktimes`);
+    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
   });
 };
 
@@ -606,7 +636,7 @@ const sendLoginData = (req, res) => {
     }
     /* if enteredPasswordHash matches that in the DB, we authenticate the user */
     res.cookie('loggedIn, true');
-    res.redirect(301, `http://localhost:${port}/user-dashboard`);
+    res.redirect(301, `http://localhost:${PORT}/user-dashboard`);
   });
 };
 
@@ -668,4 +698,4 @@ app.delete('/logOut', showLoggedOut); /* LogOut Page */
 
 
 
-app.listen(port, () => console.log('listening on Port:', port));
+app.listen(PORT, () => console.log('listening on Port:', PORT));
