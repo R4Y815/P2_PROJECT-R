@@ -89,7 +89,7 @@ const convertMsToText = (timeMs) => {
   /* Use modulo to find remainder, /1000, conv to Str and split to get only secs */
   const secsStr = ((timeMs % 60000) / 1000).toString().split('.')[0];
   /* same as with secs, but select the other array element to get ms */
-  let msStr;
+  let msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
   if (msStr !== undefined) {
     msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
   } else {
