@@ -5,27 +5,21 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
 import jsSHA from 'jssha';
-import moment from 'moment';
 
 /* POSTGRESQL STACK BELOW */
 
-/* OLD POSTGRESQL STCK BELOW */
-/* ==================================================== */
 /* Connecting database to server */
  const { Pool } = pg;
 
 
-/*const pgConnectionConfigs = {
-  user: 'raytor27',
-  host: 'localhost',
-  database: 'project_2_db',
-  port: 5432, // Postgres server always runs on this port
-}; */
-/* ==================================================== */
+
 
 /* NEW CONNECTION STACK SWITCH BELOW: FOR HEROKU */ 
-
 let pgConnectionConfigs;
+let path;
+
+ /* PORT NUMBER VARIABLE for local testing */
+const portNum = 3004;
 
 /* test to see if the env var is set. The we know we are in Heroku */
 if (process.env.DATABASE_URL) {
@@ -34,6 +28,7 @@ if (process.env.DATABASE_URL) {
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
   };
+  path = 'https://rocky-journey-67503.herokuapp.com';
 } else {
   /* this will be the same value as before */
   pgConnectionConfigs = {
@@ -42,15 +37,14 @@ if (process.env.DATABASE_URL) {
     database: 'project_2_db',
     port: 5432, // Postgres server always runs on this port
   };
+  path = `http://localhost:${portNum}`;
 }
-
-const path = 'rocky-journey-67503.herokuapp.com';
 
 const pool = new Pool (pgConnectionConfigs);
 
 const app = express();
-/* const port = 3020; */
-const PORT = process.env.PORT || 3004;
+
+const PORT = process.env.PORT || portNum;
 
 /* cookie functinality within js */
 app.use(cookieParser());
@@ -275,7 +269,7 @@ const sendNewSetup = (req, res) => {
     }
     const setupId = resultsSetup.rows[0].id;
     /* res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.'); */
-    res.redirect(301, `http://${path}/setup/${setupId}`);
+    res.redirect(301, `${path}/setup/${setupId}`);
   });
 };
 
@@ -314,7 +308,7 @@ const sendEditedSetup = (req, res) => {
       console.log('ERROR @ editSetupQuery submission = ', err);
       return;
     }
-    res.redirect(301, `http://localhost:${PORT}/setup/${setupId}`);
+    res.redirect(301, `${path}/setup/${setupId}`);
   });
 };
 
@@ -340,7 +334,7 @@ const deleteSetup = (req, res) => {
       console.log('ERROR @ delSetupQuery submission =', err);
       return;
     }
-    res.redirect(301, `http://localhost:${PORT}/setups`);
+    res.redirect(301, `${path}/setups`);
   });
 };
 
@@ -370,19 +364,6 @@ const showAllTypes = (req, res) => {
     res.render('types', content);
   });
 };
-
-/* const showAllEvents = (req, res) => {
-  const queryAllEvents = 'SELECT * FROM events;';
-  pool.query(queryAllEvents, (eventErrors, eventResults) => {
-    if (eventErrors) {
-      console.log('ERROR @ EVENTS QUERY =', eventErrors);
-      return;
-    }
-    console.log(eventResults.rows);
-    const content = { events: eventResults.rows };
-    res.render('events', content);
-  });
-}; */
 
 const showAllTracks = (req, res) => {
   const queryAllTracks = 'SELECT * FROM tracks;';
@@ -453,14 +434,6 @@ const showNewTracktimeForm = (req, res) => {
     pool.query('SELECT  platforms.name AS platform_name, platforms.model, setups.id, setups.name FROM setups INNER JOIN platforms ON setups.platform_id = platforms.id;'),
     pool.query('SELECT * FROM bodyshells ORDER by brand ASC'),
   ]).then((allResults) => {
-    /* console.log(allResults); */
-/*     console.log(allResults[0].rows);
-    console.log(allResults[1].rows);
-    console.log(allResults[2].rows);
-    console.log(allResults[3].rows);
-    console.log(allResults[4].rows);
-    console.log(allResults[5].rows); */
-    /* res.send('testing new Promise setup. See console messages.'); */
     const todayDateStr = new Date().toISOString().split('T')[0];
     console.log('todayDateStr =', todayDateStr);
     const content = {
@@ -505,7 +478,7 @@ pool.query(insertNewTimes, tracktimeInput, (errorTracktime, resultsTracktime) =>
     const tracktimeId = resultsTracktime.rows[0].id;
     console.log('tracktimeId = ', tracktimeId);
     /* res.send('Insert Tracktime data successfully sent out, please check database side.'); */
-    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
+    res.redirect(301, `${path}/tracktimes`);
   });
 };
 
@@ -563,7 +536,7 @@ const sendEditedTracktime = (req, res) => {
       return;
     }
     /* res.send('sending tracktime test- see console for data details'); */
-    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
+    res.redirect(301, `${path}/tracktimes`);
   });
 };
 
@@ -576,7 +549,7 @@ const deleteTracktime = (req, res) => {
       console.log('ERROR @ delTrackTimeQuery submission =', err);
       return;
     }
-    res.redirect(301, `http://localhost:${PORT}/tracktimes`);
+    res.redirect(301, `${path}/tracktimes`);
   });
 };
 
@@ -636,7 +609,7 @@ const sendLoginData = (req, res) => {
     }
     /* if enteredPasswordHash matches that in the DB, we authenticate the user */
     res.cookie('loggedIn, true');
-    res.redirect(301, `http://localhost:${PORT}/user-dashboard`);
+    res.redirect(301, `${path}/user-dashboard`);
   });
 };
 
@@ -646,8 +619,8 @@ const showLoggedOut = (req, res) => {
   res.render('userLogoutPage');
 };
 
-
 /* ROUTES */
+
 /* SINGULAR SETUP PAGE */
 app.get('/setup/:setupId', showSetupSheet); /* Single Setup Page */
 app.get('/setup', showNewSetupForm); /* Page to Create New Setup */
@@ -659,7 +632,6 @@ app.put('/setup/:setupId', sendEditedSetup); /* Send editSetup Data */
 app.get('/setups', showAllSetups); /* Show All Setups */
 /* DELETE SPECIFIC SETUP Page */
 app.delete('/setup/:setupId', deleteSetup); /* Delete specific Setup */
-
 
 /* TRACKTIMES PAGE */
 app.get('/tracktimes', showAllTrackTimes); /* Show All Track Times */
@@ -683,17 +655,9 @@ app.get('/user-dashboard', showDashBoard);
 app.get('/signUp', showSignUpPage); /* New User Sign Up Page */
 app.post('/signUp', sendSignUpData);
 
-
 app.get('/login', showLoginPage); /* Login Page */
 app.post('/login', sendLoginData); /* Post Login Data from front-end to backend */
 
-
 app.delete('/logOut', showLoggedOut); /* LogOut Page */ 
-
-/* ALL PLATFORMS OF USER */
-
-
-
-
 
 app.listen(PORT, () => console.log('listening on Port:', PORT));
