@@ -72,18 +72,30 @@ const whenQueryDone = (error, result) => {
 
 /* HELPER FUNCTION: CONVERT total_time from mins:secs:TEXT ms INTO ms INTEGER */
 const convertTextToMs = (timeText) => {
-  const mins = Number(timeText.split(':')[0]);
+  /* split gives an array; pull out mins, then change str to num */
+  const mins = Number(timeText.split(':')[0]);  
+  /* split gives an array; pull out secs, then change str to num */
   const secs = Number(timeText.split(':')[1].split('.')[0]);
+  /* split gives an array; pull out millisecs, then change str to num */
   const millisecs = Number(timeText.split(':')[1].split('.')[1]);
+  /* return secs in integer value for DB storage */
   return mins * 60 * 1000 + secs * 1000 + millisecs;
 };
 
 /* HELPER FUNCTION: CONVERT from ms INTEGER into   mins:secs: ms TEXT */
 const convertMsToText = (timeMs) => {
+  /* Divide 60000 to get minutes, conv to Str, split to whole number/dividend */
   const minsStr = (timeMs / 60000).toString().split('.')[0];
+  /* Use modulo to find remainder, /1000, conv to Str and split to get only secs */
   const secsStr = ((timeMs % 60000) / 1000).toString().split('.')[0];
-  const msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
-  return minsStr + ':' + secsStr + '.' + msStr;
+  /* same as with secs, but select the other array element to get ms */
+  let msStr;
+  if (msStr !== undefined) {
+    msStr = ((timeMs % 60000) / 1000).toString().split('.')[1];
+  } else {
+    msStr = '0';
+  }
+  return minsStr.padStart(2,'0') + ':' + secsStr.padStart(2,'0') + '.' + msStr.padStart(3,'0');
 };
 
 /* CONVERT JS Date Datatype into STRING */
@@ -268,7 +280,6 @@ const sendNewSetup = (req, res) => {
       return;
     }
     const setupId = resultsSetup.rows[0].id;
-    /* res.send('setup Form data successfully posted out towards Database. Please check DB to ensure data received properly.'); */
     res.redirect(301, `${path}/setup/${setupId}`);
   });
 };
@@ -287,18 +298,13 @@ const showSetupEdit = (req, res) => {
       platforms: allResults[1].rows,
       setup: allResults[2].rows[0],
     };
-/*     console.log('setup motor_size=', content.setup.motor_size);
-    console.log('Mechanic name =', content.setup.user_name); */
- /*    console.log('content.setup =', content.setup); */
     res.render('editSetup', content);
   });
 }
 
 const sendEditedSetup = (req, res) => {
-  /* console.log('req.params =', req.params); */
   const { setupId } = req.params;
   const setupEditData = JSON.parse(JSON.stringify(req.body));
-  /* console.log('setupEditData =', setupEditData); */
   const editInputsArr = Object.values(setupEditData);
   editInputsArr.push(setupId);
   console.log('editInputsArr =', editInputsArr);
@@ -416,7 +422,6 @@ const showAllTrackTimes = (req, res) => {
     outputs.forEach((output) => {
       output.timeStr = convertMsToText(output.total_time);
       output.dateStr = dateToStr(output.date, 'DD-MM-YYYY');
-      /* output.dateStr = dispDateCPUStr(output.date); */
     });
     const content = { tracktimes: outputs };
     console.log('content =', content);
@@ -477,7 +482,6 @@ pool.query(insertNewTimes, tracktimeInput, (errorTracktime, resultsTracktime) =>
     }
     const tracktimeId = resultsTracktime.rows[0].id;
     console.log('tracktimeId = ', tracktimeId);
-    /* res.send('Insert Tracktime data successfully sent out, please check database side.'); */
     res.redirect(301, `${path}/tracktimes`);
   });
 };
@@ -494,7 +498,6 @@ const showTracktimeEdit = (req, res) => {
     pool.query('SELECT * FROM bodyshells ORDER BY brand ASC;'),
     pool.query('SELECT tracktimes.id AS tracktimes_id, tracktimes.date, event_name, tracktimes.track_id, tracks.name AS track_name, tracktimes.tracktime_user_id, users.name AS user_name, tracktimes.direction, tracktimes.lapcount, tracktimes.total_time, types.name AS type_name, tracktimes.tracktime_type_id, platforms.brand AS platform_brand, platforms.model AS platform_model, platforms.name AS platform_name, tracktimes.tracktime_platform_id, setups.id AS setup_id, setups.name AS setup_name, tracktimes.tracktime_bodyshell_id, bodyshells.brand AS bodyshell_brand, bodyshells.name AS bodyshell_name, bodyshells.variant AS bodyshell_variant FROM tracktimes INNER JOIN tracks ON tracktimes.track_id = tracks.id INNER JOIN users ON tracktime_user_id = users.id INNER JOIN types ON tracktime_type_id = types.id INNER JOIN platforms ON tracktime_platform_id = platforms.id INNER JOIN setups ON tracktime_setup_id = setups.id INNER JOIN bodyshells ON tracktime_bodyshell_id = bodyshells.id WHERE tracktimes.id = $1;', tracktimeIndexData),
   ]).then((allResults) => {
-    /* console.log('allResults[6].rows[0] =', allResults[6].rows[0]); */
     const timeStr = convertMsToText(allResults[6].rows[0].total_time);
     const dateStr = dateToStr(allResults[6].rows[0].date, "DD-MM-YYYY");
 
